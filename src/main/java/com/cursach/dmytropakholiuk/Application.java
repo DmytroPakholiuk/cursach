@@ -62,25 +62,11 @@ public class Application extends javafx.application.Application {
             }
 
             if (event.getCode().equals(KeyCode.DELETE)){
-//                int count=0;
                 for (Cell cell: cells){
                     if (cell.isActive()){
                         cell.delete();
-                        cells.remove(cell);
-//                        count++;
                     }
                 }
-//                Cell [] tmp=new Cell[cells.length-count];
-//
-//                count=0;
-//                for( Cell cell: cells)
-//                {
-//                    if(!cell.active) {
-//                        tmp[count]=cell;
-//                        count++;
-//                    }
-//                }
-//                cells= tmp;
             }
 
             if (event.getCode().equals(KeyCode.ESCAPE)) {
@@ -102,6 +88,9 @@ public class Application extends javafx.application.Application {
                 } else {
 
                 }
+            }
+            if (event.getCode().equals(KeyCode.L)){
+                CellList cellList = new CellList();
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {

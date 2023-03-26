@@ -54,6 +54,9 @@ public abstract class Cell {
         this.name = (_name);
         this.shownName.setText(_name);
     }
+    public String getName(){
+        return name;
+    }
     protected Group group;
 
     protected boolean active = false;
@@ -100,6 +103,7 @@ public abstract class Cell {
 
     public void delete(){
         Application.cellGroup.getChildren().remove(this.group);
+        Application.cells.remove(this);
         this.group.setVisible(false);
     }
 

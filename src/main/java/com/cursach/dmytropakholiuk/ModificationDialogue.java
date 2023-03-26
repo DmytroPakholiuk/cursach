@@ -44,17 +44,6 @@ public class ModificationDialogue {
 
 
         CheckBox active = new CheckBox("Active");
-
-//        ComboBox cellType = new ComboBox<>();
-//        cellType.setMinWidth(200);
-//        cellType.getItems().addAll(
-//                "White blood cell",
-//                "Red blood cell",
-//                "Inactive plasmodium",
-//                "Plasmodium vivax",
-//                "HIV-plasmodium"
-//        );
-//        cellType.setPromptText("Cell type: ");
         Button submit = new Button("Submit");
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -85,15 +74,12 @@ public class ModificationDialogue {
             }
         });
 
-
-//        cellType.setPrefSize(100,50);
         submit.setPrefSize(100,50);
         VBox layout = new VBox(10);
         layout.getChildren().addAll(
                 labelName, textFieldName,
                 labelX, textFieldX,
                 labelY, textFieldY,
-//                cellType,
                 active,
                 submit
         );
