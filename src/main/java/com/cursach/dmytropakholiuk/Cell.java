@@ -27,14 +27,7 @@ public abstract class Cell {
         this.y = _y;
         this.group.setLayoutY(_y);
     }
-    protected int step = 30;
-
-    public double getStep() {
-        return step;
-    }
-    public void setStep(int _step){
-        this.step = _step;
-    }
+    public static int step = 30;
     protected Circle r;
     protected Color rColour;
     public Color getrRColour(){
