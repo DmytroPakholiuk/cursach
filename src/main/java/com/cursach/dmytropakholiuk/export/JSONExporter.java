@@ -1,12 +1,10 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.export;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONExporter implements Exporter{
+public class JSONExporter implements Exporter {
     public static JSONExporter getInstance() {
         if (instance == null){
             instance = new JSONExporter();

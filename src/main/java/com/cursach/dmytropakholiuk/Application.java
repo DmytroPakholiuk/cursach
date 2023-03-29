@@ -1,5 +1,7 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.export.Adapter;
+import com.cursach.dmytropakholiuk.export.JSONExporter;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import java.util.List;
 
 public class Application extends javafx.application.Application {
     static JSONExporter jsonExporter = JSONExporter.getInstance();
+    static Adapter adapter = Adapter.getInstance();
     static AnimationTimer timer ;
     static Scene scene;
     static BorderPane layout;

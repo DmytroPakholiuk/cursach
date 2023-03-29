@@ -1,7 +1,4 @@
-package com.cursach.dmytropakholiuk;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.cursach.dmytropakholiuk.export;
 
 public interface Exportable {
     public void bindExporter(Exporter exporter);

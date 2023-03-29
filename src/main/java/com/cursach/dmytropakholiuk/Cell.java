@@ -1,5 +1,8 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.export.Adaptable;
+import com.cursach.dmytropakholiuk.export.Adapted;
+import com.cursach.dmytropakholiuk.export.Adapter;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -11,7 +14,7 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Cell {
+public abstract class Cell implements Adaptable {
     static int newx;
     static int newy;
     protected int x, y;
@@ -127,6 +130,32 @@ public abstract class Cell {
         int y = (int) (group.getLayoutY() + step);
         setY(y);
     }
+
+    public Adapted adaptToExport(){
+        Adapter adapter = Adapter.getInstance();
+        try {
+            return adapter.adapt(this);
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+    }
+    public String adaptAndExportAsString(){
+        Adapter adapter = Adapter.getInstance();
+        Adapted adapted = null;
+        try {
+            adapted = adapter.adapt(this);
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+        throw new RuntimeException("method not implemented yet");
+    }
+
+    public void adaptAndExport(){
+        throw new RuntimeException("method not implemented yet");
+    }
+
 //    public Exporter exporter;
 //    public void bindExporter(Exporter _exporter){
 //        this.exporter = _exporter;

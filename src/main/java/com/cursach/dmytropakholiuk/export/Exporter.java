@@ -1,4 +1,6 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.export;
+
+import com.cursach.dmytropakholiuk.export.Exportable;
 
 import java.util.ArrayList;
 import java.util.List;
