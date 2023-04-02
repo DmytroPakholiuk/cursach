@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = PlasmodiumVivax.class, name = "PlasmodiumVivax"),
         @JsonSubTypes.Type(value = HIVPlasmodium.class, name = "HIVPlasmodium"),
 
+        @JsonSubTypes.Type(value = Save.class, name = "Save"),
 }
 )
 public interface Exportable {

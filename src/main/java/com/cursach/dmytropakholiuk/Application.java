@@ -104,9 +104,6 @@ public class Application extends javafx.application.Application {
             if (event.getCode().equals(KeyCode.F7)){
                 jsonExporter.quickLoad();
             }
-            if (event.getCode().equals(KeyCode.T)){
-                jsonExporter.truncateCells();
-            }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {
                     if (cell.isActive()){

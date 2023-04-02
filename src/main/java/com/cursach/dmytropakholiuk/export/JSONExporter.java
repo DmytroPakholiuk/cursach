@@ -1,8 +1,5 @@
 package com.cursach.dmytropakholiuk.export;
 import com.cursach.dmytropakholiuk.Application;
-import com.cursach.dmytropakholiuk.Cell;
-import com.cursach.dmytropakholiuk.WhiteBloodCell;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ *<p>Helps to create the save files in JSON format. Depends on Jackson lib.</p>
+ * <p>Currently, the generated JSON stores many objects inside a Save object</p>
+ */
 public class JSONExporter implements Exporter{
     public static JSONExporter getInstance() {
         if (instance == null){
@@ -18,6 +19,10 @@ public class JSONExporter implements Exporter{
         }
         return instance;
     }
+    /**
+     * You have to bind all exportables to the exporter separately. Unbound exportables won't be exported
+     * @param exportable - must implement the Exportable interface
+     */
     public void bindExportable(Exportable exportable){
         if (boundObjects.contains(exportable)){
             return;
@@ -33,8 +38,20 @@ public class JSONExporter implements Exporter{
         exportable.unbindExporter(this);
     }
     private static JSONExporter instance;
+    /**
+     * where all the bound exportables are stored
+     */
     public List<Exportable> boundObjects = new ArrayList<>();
-    public void truncateCells(){
+
+    @Override
+    public List<Exportable> getBoundObjects() {
+        return boundObjects;
+    }
+
+    /**
+     * you will have to change this method to delete your exportables
+     */
+    public void truncateExportables(){
         this.boundObjects.clear();
         Application.truncateCells();
     }
@@ -63,20 +80,16 @@ public class JSONExporter implements Exporter{
         return "";
     }
 
+    /**
+     * writes a quicksave in "quicksave.json" and overwrites it.
+     */
     public void quickSave() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("save.json"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("saves/quicksave.json"));
 
-            for (Exportable exportable: boundObjects){
-                String exported = this.exportObjectAsString(exportable);
-                writer.write(exported);
-                writer.newLine();
-            }
-
-//        Save save = new Save();
-//        writer.write(this.exportObjectAsString(save));
-//        System.out.println(save.boundObjects.toString());
-//        System.out.println(this.boundObjects.toString());
+            Save save = new Save();
+            writer.write(this.exportObjectAsString(save));
+            System.out.println("quicksaving...");
 
             writer.close();
         } catch (Exception e){
@@ -89,6 +102,12 @@ public class JSONExporter implements Exporter{
 
     }
 
+    /**
+     * takes in JSON string and creates an Exportable from it.
+     * Do notice that it can only create objects of types declared in Exportable interface using annotations
+     * @param s
+     * @return Exportable
+     */
     public Exportable importObjectFromString(String s){
         ObjectMapper mapper = this.objectMapper;
         Exportable exportable = null;
@@ -96,27 +115,29 @@ public class JSONExporter implements Exporter{
             exportable = mapper.readValue(s,
                     Exportable.class);
         } catch (JsonProcessingException e) {
-            System.out.println("could not import cell from string");
+            System.out.println("could not import object from string");
             throw new RuntimeException(e);
         }
         return exportable;
     }
 
+    /**
+     * loads from quicksave.json
+     */
     public void quickLoad() {
-        this.truncateCells();
+        this.truncateExportables();
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new File("save.json"));
-
+            scanner = new Scanner(new File("saves/quicksave.json"));
             while (scanner.hasNextLine()) {
                 String serialized = scanner.nextLine();
                 this.importObjectFromString(serialized);
             }
-
+            System.out.println("quickloading...");
             scanner.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 }

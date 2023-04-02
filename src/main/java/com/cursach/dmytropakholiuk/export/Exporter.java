@@ -11,4 +11,5 @@ public interface Exporter {
     public void bindExportable(Exportable exportable);
     public void unbindExportable(Exportable exportable);
     public List<Exportable> boundObjects = new ArrayList<>();
+    public List<Exportable> getBoundObjects();
 }
