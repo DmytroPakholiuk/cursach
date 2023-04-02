@@ -33,6 +33,7 @@ public abstract class Cell implements Exportable {
         this.y = _y;
         this.group.setLayoutY(_y);
     }
+
     protected int step = 30;
 
     public double getStep() {
@@ -42,6 +43,9 @@ public abstract class Cell implements Exportable {
         this.step = _step;
     }
     @JsonIgnore
+
+    
+
     protected Circle r;
     @JsonIgnore
     protected Color rColour;

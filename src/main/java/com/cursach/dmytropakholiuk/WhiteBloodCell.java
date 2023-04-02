@@ -34,7 +34,9 @@ public class WhiteBloodCell extends Cell {
     public Color getrRColour(){
         return rColour;
     }
+
     public WhiteBloodCell(String _name, boolean _active, int _x, int _y, int _step, double _digestTime)
+
     {
         System.out.println("called specified WhiteBloodCell constructor\n");
         this.shownName = new Text(this.name);
@@ -45,8 +47,10 @@ public class WhiteBloodCell extends Cell {
         this.setY(_y);
         this.setName(_name);
         this.setActive(_active);
+
         this.setStep(_step);
         this.setDigestTime(_digestTime);
+
 
         this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -57,6 +61,7 @@ public class WhiteBloodCell extends Cell {
         });
         Application.cells.add(this);
         Application.cellGroup.getChildren().add(this.group);
+
 
         this.bindDefaultExporter();
 
@@ -69,6 +74,7 @@ public class WhiteBloodCell extends Cell {
     public WhiteBloodCell(){
         this("", false,
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
+
                 0,0,
                 30,
                 7.5);
