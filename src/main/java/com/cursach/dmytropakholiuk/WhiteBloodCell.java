@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -22,10 +23,13 @@ public class WhiteBloodCell extends Cell {
         return new Image(Application.class.getResource("wbc.png").toString());
     }
     @Override
+    @JsonIgnore
     public Image getImage(){
         return image;
     }
+    @JsonIgnore
     public Color rColour = Color.VIOLET;
+    @JsonIgnore
     @Override
     public Color getrRColour(){
         return rColour;
@@ -70,10 +74,12 @@ public class WhiteBloodCell extends Cell {
         Application.cells.add(this);
         Application.cellGroup.getChildren().add(this.group);
 
-//        this.bindDefaultExporter();
+        this.bindDefaultExporter();
 
         System.out.println("created object "+this.toString());
-        System.out.println("adapted for export: "+this.adaptToExport());
+        System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
+
+
     }
 
     public WhiteBloodCell(){
@@ -87,6 +93,7 @@ public class WhiteBloodCell extends Cell {
     }
 
     @Override
+    @JsonIgnore
     public String getPrettyString(){
         String _digestTime = Double.toString(digestTime);
         return super.getPrettyString()+", digest time: "+_digestTime;

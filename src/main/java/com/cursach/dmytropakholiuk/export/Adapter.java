@@ -2,9 +2,13 @@ package com.cursach.dmytropakholiuk.export;
 
 import com.cursach.dmytropakholiuk.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Adapter {
 
     private static Adapter instance = null;
+    private List<Adapted> adaptedList = new ArrayList<>();
     public static Adapter getInstance() {
         if (instance == null){
             instance = new Adapter();
@@ -24,11 +28,17 @@ public class Adapter {
             type = CellType.RED_BLOOD_CELL;
         }
     }
+//    public List<Adapted> adaptAll(){
+//        for (Adaptable adaptable: Application.cells){
+//            adaptedList.add(adaptable.adaptToExport());
+//        }
+//        return adaptedList;
+//    }
 
     public Adapted adapt(Adaptable adaptable) throws Exception{
         if (adaptable instanceof Cell){
             detectCellType(adaptable);
-            Adapted adapted = createAdaptable();
+            Adapted adapted = createAdapted();
             adapted = configureAdaptedCell(adapted, adaptable);
 
             switch (type){
@@ -44,7 +54,7 @@ public class Adapter {
     }
 
 
-    private Adapted createAdaptable() {
+    private Adapted createAdapted() {
         Adapted adapted = null;
         switch (type){
             case WHITE_BLOOD_CELL:
@@ -81,5 +91,6 @@ public class Adapter {
 
         return adaptedPlasmodium;
     }
+
 
 }

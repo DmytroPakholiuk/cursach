@@ -1,10 +1,13 @@
 package com.cursach.dmytropakholiuk.export;
+import com.cursach.dmytropakholiuk.Cell;
+import com.cursach.dmytropakholiuk.WhiteBloodCell;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONExporter implements Exporter {
+public class JSONExporter implements Exporter{
     public static JSONExporter getInstance() {
         if (instance == null){
             instance = new JSONExporter();
@@ -49,5 +52,19 @@ public class JSONExporter implements Exporter {
     }
     private JSONExporter(){
 
+    }
+
+    public Exportable importObjectFromString(String s){
+        ObjectMapper mapper = this.objectMapper;
+        Exportable exportable = null;
+        try {
+            exportable = mapper.readValue("{\"@type\":\"WhiteBloodCell\",\"x\":0,\"y\":0,\"step\":30.0,\"name\":\"1676751277\",\"active\":false,\"digestTime\":7.5}",
+                    Exportable.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(exportObjectAsString(exportable));
+        System.out.println(exportObjectAsString(exportable));
+        return exportable;
     }
 }

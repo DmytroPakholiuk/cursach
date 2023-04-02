@@ -44,7 +44,8 @@ public class Application extends javafx.application.Application {
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
         group.getChildren().add(cellGroup);
-        new WhiteBloodCell();
+        Cell example =  new WhiteBloodCell("example", false, 100, 100, 30, 7.5);
+        example.exporter.importObjectFromString("");
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
