@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Application extends javafx.application.Application {
-    static JSONExporter jsonExporter = JSONExporter.getInstance();
+    public static JSONExporter jsonExporter = JSONExporter.getInstance();
     static Adapter adapter = Adapter.getInstance();
     static AnimationTimer timer ;
     static Scene scene;
@@ -95,6 +95,14 @@ public class Application extends javafx.application.Application {
             }
             if (event.getCode().equals(KeyCode.L)){
                 CellList cellList = new CellList();
+            }
+            if (event.getCode().equals(KeyCode.S)){
+                try {
+                    jsonExporter.saveAll();
+                }catch (IOException e){
+                    System.out.println("could not save");
+                    throw new RuntimeException();
+                }
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {

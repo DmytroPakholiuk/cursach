@@ -1,9 +1,13 @@
 package com.cursach.dmytropakholiuk.export;
 import com.cursach.dmytropakholiuk.Cell;
 import com.cursach.dmytropakholiuk.WhiteBloodCell;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +32,7 @@ public class JSONExporter implements Exporter{
         this.boundObjects.remove(exportable);
         exportable.unbindExporter(this);
     }
-
     private static JSONExporter instance;
-//    public Exportable[] bindedObjects = new Exportable[0];
     public List<Exportable> boundObjects = new ArrayList<>();
 //    private ObjectWriter objectWriter = new ObjectWriter(objectMapper);
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -50,6 +52,20 @@ public class JSONExporter implements Exporter{
         }
         return "";
     }
+
+    public void saveAll() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("save.json"));
+        for (Exportable exportable: boundObjects){
+            String exported = this.exportObjectAsString(exportable);
+            writer.write(exported);
+            writer.newLine();
+        }
+//        Save save = new Save();
+//        writer.write(this.exportObjectAsString(save));
+//        System.out.println(save.boundObjects.toString());
+//        System.out.println(this.boundObjects.toString());
+        writer.close();
+    }
     private JSONExporter(){
 
     }
@@ -63,8 +79,10 @@ public class JSONExporter implements Exporter{
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(exportObjectAsString(exportable));
-        System.out.println(exportObjectAsString(exportable));
         return exportable;
+    }
+
+    public void importAll() {
+
     }
 }
