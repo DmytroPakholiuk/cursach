@@ -37,22 +37,6 @@ public class WhiteBloodCell extends Cell {
     public WhiteBloodCell(String _name, boolean _active, int _x, int _y, int _step, double _digestTime)
     {
         System.out.println("called specified WhiteBloodCell constructor\n");
-//        this.image = new Image(Application.class.getResource("wbc.png").toString());
-//        ImageView imageView = new ImageView(this.image);
-//        imageView.setFitHeight(50);
-//        imageView.setFitWidth(50);
-//        imageView.setPreserveRatio(true);
-//        this.imageView = imageView;
-//
-//        Circle aura = new Circle();
-//        aura.setRadius(40.0f);
-//        aura.setFill(Color.VIOLET);
-//        this.r = aura;
-//
-//        this.group = new Group(r, imageView, shownName);
-//        imageView.relocate(20, 15);
-//        shownName.relocate(8, 0);
-//        r.relocate(0, 0);
         this.shownName = new Text(this.name);
 
         configureGroup();
@@ -98,9 +82,6 @@ public class WhiteBloodCell extends Cell {
         String _digestTime = Double.toString(digestTime);
         return super.getPrettyString()+", digest time: "+_digestTime;
     }
-//    public String asExportableString(){
-//        return this.exporter.exportObjectAsString(this);
-//    }
 
     public WhiteBloodCell clone() throws CloneNotSupportedException
     {

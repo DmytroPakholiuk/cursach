@@ -119,6 +119,7 @@ public abstract class Cell implements Exportable {
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
         this.group.setVisible(false);
+        this.unbindExporter(exporter);
     }
 
     public void moveLeft() {
@@ -141,32 +142,6 @@ public abstract class Cell implements Exportable {
         int y = (int) (group.getLayoutY() + step);
         setY(y);
     }
-
-//    public Adapted adaptToExport(){
-//        Adapter adapter = Adapter.getInstance();
-//        try {
-//            return adapter.adapt(this);
-//        }
-//        catch (Exception e){
-//            throw new RuntimeException();
-//        }
-//    }
-//    public String adaptAndExportAsString(){
-//        Adapter adapter = Adapter.getInstance();
-//        Adapted adapted = null;
-//        try {
-//            adapted = adapter.adapt(this);
-//        }
-//        catch (Exception e){
-//            throw new RuntimeException();
-//        }
-//        JSONExporter exporter = JSONExporter.getInstance();
-//        return exporter.exportObjectAsString(adapted);
-//    }
-//
-//    public void adaptAndExport(){
-//        throw new RuntimeException("method not implemented yet");
-//    }
 
     @JsonIgnore
     public Exporter exporter;

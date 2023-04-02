@@ -14,17 +14,15 @@ public class Save implements Exportable{
 
     public Save() {
         this.bindDefaultExporter();
-        boundObjects = exporter.boundObjects;
+        boundObjects = new ArrayList<>(exporter.boundObjects);
 
     }
 
     public void bindExporter(Exporter _exporter){
         this.exporter = _exporter;
-        _exporter.bindExportable(this);
     };
     public void unbindExporter(Exporter _exporter){
         this.exporter = null;
-        _exporter.unbindExportable(this);
     };
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
