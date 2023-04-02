@@ -63,7 +63,8 @@ public class CreationDialogue {
                 try {
                     switch (cellType.getValue().toString()){
                         case "White blood cell":
-                            WhiteBloodCell cell = new WhiteBloodCell(name, _active, x, y);
+
+                            WhiteBloodCell cell = new WhiteBloodCell(name, _active, x, y, 30, 7.5);
                             break;
                         case "Red blood cell":
                             CellFactory.createCell(CellFactory.CELLTYPE_RBC);break;

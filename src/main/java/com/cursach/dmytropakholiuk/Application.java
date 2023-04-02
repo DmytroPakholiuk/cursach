@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.export.JSONExporter;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Application extends javafx.application.Application {
-    static JSONExporter jsonExporter = JSONExporter.getInstance();
+    public static JSONExporter jsonExporter = JSONExporter.getInstance();
     static AnimationTimer timer ;
     static Scene scene;
     static BorderPane layout;
@@ -30,6 +31,11 @@ public class Application extends javafx.application.Application {
     public static Group cellGroup = new Group();
 //    public static Cell[] cells = new Cell[0];
     public static List<Cell> cells = new ArrayList<>();
+    public static void truncateCells(){
+        for (int i = cells.toArray().length - 1; i >= 0; i--){
+            cells.get(i).delete();
+        }
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -41,7 +47,7 @@ public class Application extends javafx.application.Application {
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
         group.getChildren().add(cellGroup);
-        new WhiteBloodCell();
+        Cell example =  new WhiteBloodCell("example", false, 100, 100, 30, 7.5);
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
@@ -62,9 +68,9 @@ public class Application extends javafx.application.Application {
             }
 
             if (event.getCode().equals(KeyCode.DELETE)){
-                for (Cell cell: cells){
-                    if (cell.isActive()){
-                        cell.delete();
+                for (int i = cells.toArray().length - 1; i >= 0; i--){
+                    if (cells.get(i).isActive()){
+                        cells.get(i).delete();
                     }
                 }
             }
@@ -91,6 +97,12 @@ public class Application extends javafx.application.Application {
             }
             if (event.getCode().equals(KeyCode.L)){
                 CellList cellList = new CellList();
+            }
+            if (event.getCode().equals(KeyCode.F6)){
+                jsonExporter.quickSave();
+            }
+            if (event.getCode().equals(KeyCode.F7)){
+                jsonExporter.quickLoad();
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {
