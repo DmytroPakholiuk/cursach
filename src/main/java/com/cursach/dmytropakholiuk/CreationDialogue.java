@@ -64,10 +64,11 @@ public class CreationDialogue {
                     switch (cellType.getValue().toString()){
                         case "White blood cell":
 
-                            WhiteBloodCell cell = new WhiteBloodCell(name, _active, x, y, 30, 7.5);
+                            WhiteBloodCell whiteBloodCell = new WhiteBloodCell(name, _active, x, y, 30, 7.5);
                             break;
                         case "Red blood cell":
-                            CellFactory.createCell(CellFactory.CELLTYPE_RBC);break;
+                            RedBloodCell redBloodCell = new RedBloodCell(name, _active, x, y, 30);
+                            break;
                         case "Inactive plasmodium":
                             CellFactory.createCell(CellFactory.CELLTYPE_INACTIVEPLAS);break;
                         case "Plasmodium vivax":

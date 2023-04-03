@@ -1,20 +1,99 @@
 package com.cursach.dmytropakholiuk;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class RedBloodCell extends Cell implements Cloneable{
 
-
-    public RedBloodCell()
-    {
-        this.image = new Image("src/main/resources/com/example/demo1/rbc.png");
+    private Image image = configureImage();
+    public Image configureImage(){
+        System.out.println("setting image for an RBC");
+        return new Image(Application.class.getResource("rbc.png").toString());
+    }
+    @Override
+    @JsonIgnore
+    public Image getImage(){
+        return image;
+    }
+    @JsonIgnore
+    public Color rColour = Color.PURPLE;
+    @JsonIgnore
+    @Override
+    public Color getrRColour(){
+        return rColour;
     }
 
-    public RedBloodCell clone() throws CloneNotSupportedException
+    public RedBloodCell(String _name, boolean _active, int _x, int _y, int _step)
+
     {
-        RedBloodCell cloned = (RedBloodCell) super.clone();
+        System.out.println("called specified RedBloodCell constructor\n");
+        this.shownName = new Text(this.name);
+
+        configureGroup();
+
+        this.setX(_x);
+        this.setY(_y);
+        this.setName(_name);
+        this.setActive(_active);
+
+        this.setStep(_step);
+
+
+        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                setActive(!active);
+            }
+        });
+        Application.cells.add(this);
+        Application.cellGroup.getChildren().add(this.group);
+
+
+        this.bindDefaultExporter();
+
+        System.out.println("created object "+this.toString());
+        System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
+
+
+    }
+
+    public RedBloodCell(){
+        this("", false,
+//                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
+
+                0,0,
+                30);
+
+        System.out.println("...via default RedBloodCell constructor\n");
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPrettyString(){
+        return super.getPrettyString();
+    }
+
+    public WhiteBloodCell clone() throws CloneNotSupportedException
+    {
+        WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
 
         return cloned;
+    }
+    public boolean equals(Object o){
+        if (o instanceof RedBloodCell){
+            if (((RedBloodCell) o).name.equals(this.name)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public String toString(){
+        return this.getPrettyString();
     }
 
 
