@@ -2,10 +2,7 @@ package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.export.*;
-import com.cursach.dmytropakholiuk.strategy.InactiveStrategy;
-import com.cursach.dmytropakholiuk.strategy.Strategy;
-import com.cursach.dmytropakholiuk.strategy.StrategyManageable;
-import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
+import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -192,13 +189,26 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     }
 
 
-    List<UsableStrategies> allowedStrategies = new ArrayList<>();
+    protected static List<UsableStrategies> allowedStrategies = setAllowedStrategies();
+    protected static List<UsableStrategies> setAllowedStrategies(){
+        List<UsableStrategies> strategies = new ArrayList<>();
+        strategies.add(UsableStrategies.INACTIVE);
+        strategies.add(UsableStrategies.RANDOM);
+
+        return strategies;
+    }
+    public static List<UsableStrategies> getAllowedStrategies(){
+        return Cell.allowedStrategies;
+    }
     Strategy strategy;
     public void setStrategy(Strategy strategy){
-        this.strategy = strategy;
+        if (Cell.getAllowedStrategies().contains(Strategy.getType(strategy))){
+            this.strategy = strategy;
+            return;
+        }
+        System.out.println("could not assign strategy "+strategy.toString()+" to "+this.toString()+": strategy type not allowed");
     }
     public void setDefaultStrategy(){
         this.setStrategy(new InactiveStrategy());
     }
-
 }
