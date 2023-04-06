@@ -1,5 +1,6 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.cells;
 
+import com.cursach.dmytropakholiuk.Application;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -7,12 +8,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class RedBloodCell extends Cell implements Cloneable{
+public class WhiteBloodCell extends Cell {
 
+    private double digestTime = 7.5;
+    public double getDigestTime(){
+        return digestTime;
+    }
+    public void setDigestTime(double _digestTime){
+        digestTime = _digestTime;
+    }
     private Image image = configureImage();
     public Image configureImage(){
-        System.out.println("setting image for an RBC");
-        return new Image(Application.class.getResource("rbc.png").toString());
+        System.out.println("setting image for a WBC");
+        return new Image(Application.class.getResource("wbc.png").toString());
     }
     @Override
     @JsonIgnore
@@ -20,17 +28,17 @@ public class RedBloodCell extends Cell implements Cloneable{
         return image;
     }
     @JsonIgnore
-    public Color rColour = Color.PURPLE;
+    public Color rColour = Color.VIOLET;
     @JsonIgnore
     @Override
     public Color getrRColour(){
         return rColour;
     }
 
-    public RedBloodCell(String _name, boolean _active, int _x, int _y, int _step)
+    public WhiteBloodCell(String _name, boolean _active, int _x, int _y, int _step, double _digestTime)
 
     {
-        System.out.println("called specified RedBloodCell constructor\n");
+        System.out.println("called specified WhiteBloodCell constructor\n");
         this.shownName = new Text(this.name);
 
         configureGroup();
@@ -41,6 +49,7 @@ public class RedBloodCell extends Cell implements Cloneable{
         this.setActive(_active);
 
         this.setStep(_step);
+        this.setDigestTime(_digestTime);
 
 
         this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -62,20 +71,22 @@ public class RedBloodCell extends Cell implements Cloneable{
 
     }
 
-    public RedBloodCell(){
+    public WhiteBloodCell(){
         this("", false,
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
 
                 0,0,
-                30);
+                30,
+                7.5);
 
-        System.out.println("...via default RedBloodCell constructor\n");
+        System.out.println("...via default WhiteBloodCell constructor\n");
     }
 
     @Override
     @JsonIgnore
     public String getPrettyString(){
-        return super.getPrettyString();
+        String _digestTime = Double.toString(digestTime);
+        return super.getPrettyString()+", digest time: "+_digestTime;
     }
 
     public WhiteBloodCell clone() throws CloneNotSupportedException
@@ -85,8 +96,8 @@ public class RedBloodCell extends Cell implements Cloneable{
         return cloned;
     }
     public boolean equals(Object o){
-        if (o instanceof RedBloodCell){
-            if (((RedBloodCell) o).name.equals(this.name)){
+        if (o instanceof WhiteBloodCell){
+            if (((WhiteBloodCell) o).name.equals(this.name)){
                 return true;
             }
         }
@@ -95,6 +106,4 @@ public class RedBloodCell extends Cell implements Cloneable{
     public String toString(){
         return this.getPrettyString();
     }
-
-
 }

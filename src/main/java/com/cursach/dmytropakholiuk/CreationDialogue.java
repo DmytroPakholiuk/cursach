@@ -1,4 +1,7 @@
 package com.cursach.dmytropakholiuk;
+import com.cursach.dmytropakholiuk.cells.CellFactory;
+import com.cursach.dmytropakholiuk.cells.RedBloodCell;
+import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;

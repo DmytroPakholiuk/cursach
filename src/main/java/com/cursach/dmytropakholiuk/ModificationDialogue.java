@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.cells.Cell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -10,12 +11,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 public class ModificationDialogue {
 
-    public Cell modifiedCell;
+    public com.cursach.dmytropakholiuk.cells.Cell modifiedCell;
     public ModificationDialogue(Cell cell){
         this.modifiedCell = cell;
 
@@ -27,20 +27,20 @@ public class ModificationDialogue {
         labelName.setFont(new Font(20));
         TextField textFieldName = new TextField();
         textFieldName.setFont(new Font(20));
-        textFieldName.setText(cell.name);
+        textFieldName.setText(cell.getName());
 
 
         Label labelX = new Label("X:");
         labelX.setFont(new Font(20));
         TextField textFieldX = new TextField();
         textFieldX.setFont(new Font(20));
-        textFieldX.setText(Integer.toString(cell.getX()));
+        textFieldX.setText(Double.toString(cell.getX()));
 
         Label labelY = new Label("Y:");
         labelY.setFont(new Font(20));
         TextField textFieldY = new TextField();
         textFieldY.setFont(new Font(20));
-        textFieldY.setText(Integer.toString(cell.getY()));
+        textFieldY.setText(Double.toString(cell.getY()));
 
 
         CheckBox active = new CheckBox("Active");
@@ -51,15 +51,15 @@ public class ModificationDialogue {
 
                 boolean answer = true;
                 String name = textFieldName.getText();
-                int x = modifiedCell.getX();
+                double x = modifiedCell.getX();
                 try {
                     x = Integer.parseInt(textFieldX.getText());
                 } catch (Exception e){
 
                 }
-                int y = modifiedCell.getY();
+                Double y = modifiedCell.getY();
                 try {
-                    y = Integer.parseInt(textFieldY.getText());
+                    y = Double.parseDouble(textFieldY.getText());
                 } catch (Exception e){
 
                 }

@@ -1,5 +1,8 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.cells.Cell;
+import com.cursach.dmytropakholiuk.cells.CellList;
+import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -30,7 +33,7 @@ public class Application extends javafx.application.Application {
     public static Group group = new Group();
     public static Group cellGroup = new Group();
 //    public static Cell[] cells = new Cell[0];
-    public static List<Cell> cells = new ArrayList<>();
+    public static List<com.cursach.dmytropakholiuk.cells.Cell> cells = new ArrayList<>();
     public static void truncateCells(){
         for (int i = cells.toArray().length - 1; i >= 0; i--){
             cells.get(i).delete();
@@ -47,7 +50,7 @@ public class Application extends javafx.application.Application {
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
         group.getChildren().add(cellGroup);
-        Cell example =  new WhiteBloodCell("example", false, 100, 100, 30, 7.5);
+        com.cursach.dmytropakholiuk.cells.Cell example =  new WhiteBloodCell("example", false, 100, 100, 30, 7.5);
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
@@ -76,15 +79,15 @@ public class Application extends javafx.application.Application {
             }
 
             if (event.getCode().equals(KeyCode.ESCAPE)) {
-                for (Cell cell: cells){
+                for (com.cursach.dmytropakholiuk.cells.Cell cell: cells){
                     cell.setActive(false);
                 }
             }
             if (event.getCode().equals(KeyCode.M)){
                 int count = 0;
-                Cell selected = null;
-                for (Cell cell: cells){
-                    if (cell.active){
+                com.cursach.dmytropakholiuk.cells.Cell selected = null;
+                for (com.cursach.dmytropakholiuk.cells.Cell cell: cells){
+                    if (cell.isActive()){
                         selected = cell;
                         count++;
                     }
@@ -105,21 +108,21 @@ public class Application extends javafx.application.Application {
                 jsonExporter.quickLoad();
             }
             if (event.getCode().equals(KeyCode.UP)) {
-                for (Cell cell : cells) {
+                for (com.cursach.dmytropakholiuk.cells.Cell cell : cells) {
                     if (cell.isActive()){
                         cell.moveUp();
                     }
                 }
             }
             if (event.getCode().equals(KeyCode.DOWN)) {
-                for (Cell cell : cells) {
+                for (com.cursach.dmytropakholiuk.cells.Cell cell : cells) {
                     if (cell.isActive()){
                         cell.moveDown();
                     }
                 }
             }
             if (event.getCode().equals(KeyCode.LEFT)) {
-                for (Cell cell : cells) {
+                for (com.cursach.dmytropakholiuk.cells.Cell cell : cells) {
                     if (cell.isActive()){
                         cell.moveLeft();
                     }

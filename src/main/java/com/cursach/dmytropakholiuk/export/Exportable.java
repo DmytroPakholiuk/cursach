@@ -1,7 +1,7 @@
 package com.cursach.dmytropakholiuk.export;
 
 
-import com.cursach.dmytropakholiuk.*;
+import com.cursach.dmytropakholiuk.cells.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

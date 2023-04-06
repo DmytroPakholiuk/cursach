@@ -1,5 +1,6 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.cells;
 
+import com.cursach.dmytropakholiuk.Application;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
