@@ -187,27 +187,35 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
     }
-
-
-    protected static List<UsableStrategies> allowedStrategies = setAllowedStrategies();
-    protected static List<UsableStrategies> setAllowedStrategies(){
+    @JsonIgnore
+    protected List<UsableStrategies> allowedStrategies = setAllowedStrategies();
+    protected List<UsableStrategies> setAllowedStrategies(){
         List<UsableStrategies> strategies = new ArrayList<>();
         strategies.add(UsableStrategies.INACTIVE);
         strategies.add(UsableStrategies.RANDOM);
 
         return strategies;
     }
-    public static List<UsableStrategies> getAllowedStrategies(){
-        return Cell.allowedStrategies;
+
+    @JsonIgnore
+    public List<UsableStrategies> getAllowedStrategies(){
+        return this.allowedStrategies;
     }
-    Strategy strategy;
+    @JsonIgnore
+    protected Strategy strategy;
     public void setStrategy(Strategy strategy){
-        if (Cell.getAllowedStrategies().contains(Strategy.getType(strategy))){
+        if (this.getAllowedStrategies().contains(Strategy.getType(strategy))){
             this.strategy = strategy;
+            strategy.bindManageable(this);
             return;
         }
         System.out.println("could not assign strategy "+strategy.toString()+" to "+this.toString()+": strategy type not allowed");
     }
+    @JsonIgnore
+    public Strategy getStrategy(){
+        return strategy;
+    }
+
     public void setDefaultStrategy(){
         this.setStrategy(new InactiveStrategy());
     }

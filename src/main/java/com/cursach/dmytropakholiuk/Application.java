@@ -4,6 +4,7 @@ import com.cursach.dmytropakholiuk.cells.Cell;
 import com.cursach.dmytropakholiuk.cells.CellList;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
+import com.cursach.dmytropakholiuk.strategy.EaterStrategy;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -39,6 +40,15 @@ public class Application extends javafx.application.Application {
             cells.get(i).delete();
         }
     }
+    public static AnimationTimer strategyTimer = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            for (Cell cell: cells){
+//                System.out.println(cell.getStrategy());
+                cell.getStrategy().execute();
+            }
+        }
+    };
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -55,7 +65,7 @@ public class Application extends javafx.application.Application {
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
         stage.setScene(scene);
-//        timer.start();
+        strategyTimer.start();
         stage.show();
     }
 

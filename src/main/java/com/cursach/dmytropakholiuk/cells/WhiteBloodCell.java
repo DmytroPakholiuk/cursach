@@ -1,12 +1,17 @@
 package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.strategy.EaterStrategy;
+import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WhiteBloodCell extends Cell {
 
@@ -64,6 +69,7 @@ public class WhiteBloodCell extends Cell {
 
 
         this.bindDefaultExporter();
+        this.setDefaultStrategy();
 
         System.out.println("created object "+this.toString());
         System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
@@ -105,5 +111,18 @@ public class WhiteBloodCell extends Cell {
     }
     public String toString(){
         return this.getPrettyString();
+    }
+
+    protected List<UsableStrategies> setAllowedStrategies(){
+        List<UsableStrategies> strategies = new ArrayList<>();
+        strategies.add(UsableStrategies.INACTIVE);
+        strategies.add(UsableStrategies.RANDOM);
+        strategies.add(UsableStrategies.EATER);
+
+        return strategies;
+    }
+    @Override
+    public void setDefaultStrategy() {
+        this.setStrategy(new EaterStrategy(this.digestTime));
     }
 }
