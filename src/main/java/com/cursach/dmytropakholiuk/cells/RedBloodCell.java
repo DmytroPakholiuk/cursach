@@ -1,12 +1,18 @@
 package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.strategy.EaterStrategy;
+import com.cursach.dmytropakholiuk.strategy.InactiveStrategy;
+import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RedBloodCell extends Cell implements Cloneable{
 
@@ -54,7 +60,8 @@ public class RedBloodCell extends Cell implements Cloneable{
         Application.cells.add(this);
         Application.cellGroup.getChildren().add(this.group);
 
-
+        allowedStrategies = setAllowedStrategies();
+        this.setDefaultStrategy();
         this.bindDefaultExporter();
 
         System.out.println("created object "+this.toString());
@@ -82,6 +89,7 @@ public class RedBloodCell extends Cell implements Cloneable{
     public WhiteBloodCell clone() throws CloneNotSupportedException
     {
         WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
+        cloned.setDefaultStrategy();
 
         return cloned;
     }
@@ -97,5 +105,15 @@ public class RedBloodCell extends Cell implements Cloneable{
         return this.getPrettyString();
     }
 
+    protected List<UsableStrategies> setAllowedStrategies(){
+        List<UsableStrategies> strategies = new ArrayList<>();
+        strategies.add(UsableStrategies.INACTIVE);
+        strategies.add(UsableStrategies.RANDOM);
 
+        return strategies;
+    }
+    @Override
+    public void setDefaultStrategy() {
+        this.setStrategy(new InactiveStrategy());
+    }
 }

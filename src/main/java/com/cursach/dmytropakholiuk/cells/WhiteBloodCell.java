@@ -22,8 +22,8 @@ public class WhiteBloodCell extends Cell {
     public void setDigestTime(double _digestTime){
         digestTime = _digestTime;
     }
-    private Image image = configureImage();
-    public Image configureImage(){
+    protected Image image = configureImage();
+    protected Image configureImage(){
         System.out.println("setting image for a WBC");
         return new Image(Application.class.getResource("wbc.png").toString());
     }
@@ -69,6 +69,7 @@ public class WhiteBloodCell extends Cell {
 
 
         this.bindDefaultExporter();
+        allowedStrategies = setAllowedStrategies();
         this.setDefaultStrategy();
 
         System.out.println("created object "+this.toString());
@@ -98,6 +99,7 @@ public class WhiteBloodCell extends Cell {
     public WhiteBloodCell clone() throws CloneNotSupportedException
     {
         WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
+        cloned.setDefaultStrategy();
 
         return cloned;
     }

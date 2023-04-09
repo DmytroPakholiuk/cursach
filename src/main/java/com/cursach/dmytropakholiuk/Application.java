@@ -44,7 +44,9 @@ public class Application extends javafx.application.Application {
         @Override
         public void handle(long l) {
             for (Cell cell: cells){
-//                System.out.println(cell.getStrategy());
+//                System.out.println(cell.toString()
+//                        .getStrategy()
+//                );
                 cell.getStrategy().execute();
             }
         }
@@ -115,7 +117,13 @@ public class Application extends javafx.application.Application {
                 jsonExporter.quickSave();
             }
             if (event.getCode().equals(KeyCode.F7)){
+                Application.strategyTimer.stop();
                 jsonExporter.quickLoad();
+                for (Cell cell: cells){
+                    System.out.println(Application.jsonExporter.exportObjectAsString(cell));
+                }
+
+                Application.strategyTimer.start();
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {

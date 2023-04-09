@@ -1,6 +1,7 @@
 package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -8,14 +9,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.util.List;
+
 public class InactivePlasmodium extends Cell implements Cloneable{
 
 
-    private Image image = configureImage();
-    public Image configureImage(){
-        throw new RuntimeException("not implemented yet");
-//        System.out.println("setting image for an inactive plasmodium");
-//        return new Image(Application.class.getResource("rbc.png").toString());
+    @JsonIgnore
+    private Image image;
+    protected Image configureImage(){
+        System.out.println("setting image for an inactive plasmodium");
+        return stage.getImage();
     }
     @Override
     @JsonIgnore
@@ -31,9 +34,13 @@ public class InactivePlasmodium extends Cell implements Cloneable{
     }
 
     public InactivePlasmodium(String _name, boolean _active, int _x, int _y, int _step)
-
     {
         System.out.println("called specified InactivePlasmodium constructor\n");
+
+        this.bindDefaultStage();
+        System.out.println(this.stage.toString());
+        image = configureImage();
+
         this.shownName = new Text(this.name);
 
         configureGroup();
@@ -58,11 +65,12 @@ public class InactivePlasmodium extends Cell implements Cloneable{
 
 
         this.bindDefaultExporter();
+        allowedStrategies = setAllowedStrategies();
+        this.setDefaultStrategy();
+
 
         System.out.println("created object "+this.toString());
         System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
-
-
     }
 
     public InactivePlasmodium(){
@@ -75,6 +83,28 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         System.out.println("...via default InactivePlasmodium constructor\n");
     }
 
+
+    protected PStage stage;
+
+    public PStage getStage() {
+        return stage;
+    }
+    public void bindStage(PStage stage){
+//        System.out.println(stage.toString());
+//        throw new RuntimeException("asasdadasadadsadsdadasdasasd");
+        stage.plasmodium = this;
+        this.stage = stage;
+
+        allowedStrategies = setAllowedStrategies();
+        this.setDefaultStrategy();
+    }
+    public void setStage(PStage stage){
+        bindStage(stage);
+    }
+    public void bindDefaultStage(){
+        this.bindStage(new SchizontPStage());
+    }
+
     @Override
     @JsonIgnore
     public String getPrettyString(){
@@ -84,12 +114,13 @@ public class InactivePlasmodium extends Cell implements Cloneable{
     public WhiteBloodCell clone() throws CloneNotSupportedException
     {
         WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
+        cloned.setDefaultStrategy();
 
         return cloned;
     }
     public boolean equals(Object o){
-        if (o instanceof RedBloodCell){
-            if (((RedBloodCell) o).name.equals(this.name)){
+        if (o instanceof InactivePlasmodium){
+            if (((InactivePlasmodium) o).name.equals(this.name)){
                 return true;
             }
         }
@@ -97,6 +128,16 @@ public class InactivePlasmodium extends Cell implements Cloneable{
     }
     public String toString(){
         return this.getPrettyString();
+    }
+
+    @JsonIgnore
+    protected List<UsableStrategies> setAllowedStrategies(){
+        return getStage().allowedStrategies();
+    }
+    @Override
+    public void setDefaultStrategy() {
+        this.setStrategy(getStage().defaultStrategy());
+        System.out.println(strategy.toString());
     }
 
 }

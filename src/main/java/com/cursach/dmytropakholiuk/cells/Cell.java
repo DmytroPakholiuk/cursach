@@ -177,6 +177,11 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     @JsonIgnore
     public Exporter exporter;
     public void bindExporter(Exporter _exporter){
+        if (_exporter != null){
+            if (_exporter.equals(this.exporter)) {
+                return;
+            }
+        }
         this.exporter = _exporter;
         _exporter.bindExportable(this);
     };
@@ -188,7 +193,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.bindExporter(Application.jsonExporter);
     }
     @JsonIgnore
-    protected List<UsableStrategies> allowedStrategies = setAllowedStrategies();
+    protected List<UsableStrategies> allowedStrategies;
+//            = setAllowedStrategies();
     protected List<UsableStrategies> setAllowedStrategies(){
         List<UsableStrategies> strategies = new ArrayList<>();
         strategies.add(UsableStrategies.INACTIVE);
@@ -204,12 +210,14 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     @JsonIgnore
     protected Strategy strategy;
     public void setStrategy(Strategy strategy){
-        if (this.getAllowedStrategies().contains(Strategy.getType(strategy))){
+        if (this.getAllowedStrategies().contains(Strategy.getType(strategy)) || strategy == null){
             this.strategy = strategy;
-            strategy.bindManageable(this);
+            if (strategy != null){
+                strategy.bindManageable(this);
+            }
             return;
         }
-        System.out.println("could not assign strategy "+strategy.toString()+" to "+this.toString()+": strategy type not allowed");
+        System.out.println("could not assign strategy "+ strategy.toString() +" to "+this.toString()+": strategy type not allowed");
     }
     @JsonIgnore
     public Strategy getStrategy(){

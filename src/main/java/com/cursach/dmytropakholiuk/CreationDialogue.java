@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk;
 import com.cursach.dmytropakholiuk.cells.CellFactory;
+import com.cursach.dmytropakholiuk.cells.InactivePlasmodium;
 import com.cursach.dmytropakholiuk.cells.RedBloodCell;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import javafx.stage.Modality;
@@ -73,13 +74,14 @@ public class CreationDialogue {
                             RedBloodCell redBloodCell = new RedBloodCell(name, _active, x, y, 30);
                             break;
                         case "Inactive plasmodium":
-                            CellFactory.createCell(CellFactory.CELLTYPE_INACTIVEPLAS);break;
+                            new InactivePlasmodium(name, _active, x, y, 30);break;
                         case "Plasmodium vivax":
                             CellFactory.createCell(CellFactory.CELLTYPE_PLASVIVAX);break;
                         case "HIV-plasmodium":
                             CellFactory.createCell(CellFactory.CELLTYPE_HIVPLAS);break;
                     }
                 } catch (Exception e){
+                    e.printStackTrace();
                     System.out.println("could not create a cell");
                 }
                 window.close();
