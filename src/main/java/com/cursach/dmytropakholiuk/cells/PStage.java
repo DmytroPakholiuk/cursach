@@ -39,9 +39,10 @@ public abstract class PStage implements Exportable {
         this.exporter = _exporter;
 //        _exporter.bindExportable(this);
     };
-    public void unbindExporter(Exporter _exporter){
+    public void unbindExporter(){
+        exporter.unbindExportable(this);
         this.exporter = null;
-//        _exporter.unbindExportable(this);
+
     };
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);

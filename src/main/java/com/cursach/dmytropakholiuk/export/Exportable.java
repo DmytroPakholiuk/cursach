@@ -28,6 +28,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 public interface Exportable {
     public void bindExporter(Exporter exporter);
-    public void unbindExporter(Exporter exporter);
+    public void unbindExporter();
     public Exporter exporter = null;
 }

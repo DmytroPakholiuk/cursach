@@ -12,12 +12,15 @@ public abstract class AggressiveStrategy extends ActiveStrategy{
 
     public double aggressionRange;
     public double attackRange;
-    public boolean targetInRange(double range){
-        if (Math.abs(target.getX() - this.manageable.getX()) < range){
-            if (Math.abs(target.getY() - this.manageable.getY()) < range){
-                return true;
+    public boolean targetInRange(Deployable _target, double range){
+        if (_target != null){
+            if (Math.abs(_target.getX() - this.manageable.getX()) < range){
+                if (Math.abs(_target.getY() - this.manageable.getY()) < range){
+                    return true;
+                }
             }
         }
+
         return false;
     }
     public abstract void attack();
@@ -28,7 +31,7 @@ public abstract class AggressiveStrategy extends ActiveStrategy{
     public void chooseTarget(){
         for (Cell target: Application.cells){
             if (isHostile(target)){
-                if (targetInRange(aggressionRange)){
+                if (targetInRange(target, aggressionRange)){
                     this.setTarget(target);
                     return;
                 }

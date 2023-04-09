@@ -25,7 +25,7 @@ public class Save implements Exportable{
     public void bindExporter(Exporter _exporter){
         this.exporter = _exporter;
     };
-    public void unbindExporter(Exporter _exporter){
+    public void unbindExporter(){
         this.exporter = null;
     };
 

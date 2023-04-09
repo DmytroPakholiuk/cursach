@@ -35,7 +35,7 @@ public class JSONExporter implements Exporter{
             return;
         }
         this.boundObjects.remove(exportable);
-        exportable.unbindExporter(this);
+        exportable.unbindExporter();
     }
     private static JSONExporter instance;
     /**

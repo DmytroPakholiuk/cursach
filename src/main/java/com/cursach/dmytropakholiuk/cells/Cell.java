@@ -148,8 +148,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
         this.group.setVisible(false);
-        this.unbindExporter(exporter);
-        this.strategy.unbindManageable();
+        this.unbindExporter();
+//        this.strategy.unbindManageable();
         this.setStrategy(null);
     }
 
@@ -185,9 +185,12 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.exporter = _exporter;
         _exporter.bindExportable(this);
     };
-    public void unbindExporter(Exporter _exporter){
+    public void unbindExporter(){
+        if (exporter != null) {
+            exporter.unbindExportable(this);
+        }
         this.exporter = null;
-        _exporter.unbindExportable(this);
+
     };
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);

@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk.strategy;
 
+import com.cursach.dmytropakholiuk.cells.CellType;
 import com.cursach.dmytropakholiuk.cells.Deployable;
 
 public class EaterStrategy extends MeeleeStrategy{
@@ -9,7 +10,7 @@ public class EaterStrategy extends MeeleeStrategy{
 
     public void attack(){
         if(target != null){
-            if (targetInRange(attackRange)){
+            if (targetInRange(target, attackRange)){
                 eat(target);
             }
         }
@@ -17,7 +18,7 @@ public class EaterStrategy extends MeeleeStrategy{
 
     public void eat( Deployable target){
         target.delete();
-
+        this.setTarget(null);
     }
 
     public void execute(){
@@ -32,6 +33,11 @@ public class EaterStrategy extends MeeleeStrategy{
             setTarget(target);
         }
         this.attackRange = 30;
+
+        this.allowedTargets.add(CellType.HIV_PLASMODIUM);
+        this.allowedTargets.add(CellType.INACTIVE_PLASMODIUM);
+        this.allowedTargets.add(CellType.PLASMODIUM_VIVAX);
+
     }
     public EaterStrategy(double digestTime, double range){
         this(digestTime, range, null);

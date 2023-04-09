@@ -20,13 +20,13 @@ public abstract class ActiveStrategy extends Strategy{
                 manageable.setX(manageable.getX() + manageable.getSpeed());
             }
             if (target.getX() < manageable.getX()){
-                manageable.setX(manageable.getX() + manageable.getSpeed());
+                manageable.setX(manageable.getX() - manageable.getSpeed());
             }
             if (target.getY() > manageable.getY()){
                 manageable.setY(manageable.getY() + manageable.getSpeed());
             }
             if (target.getY() < manageable.getY()){
-                manageable.setY(manageable.getY() + manageable.getSpeed());
+                manageable.setY(manageable.getY() - manageable.getSpeed());
             }
         }
     }

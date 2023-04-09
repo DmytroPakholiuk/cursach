@@ -4,7 +4,6 @@ import com.cursach.dmytropakholiuk.cells.Cell;
 import com.cursach.dmytropakholiuk.cells.CellList;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
-import com.cursach.dmytropakholiuk.strategy.EaterStrategy;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -15,11 +14,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
-
-
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.databind.ObjectWriter;
-//todo implement saving session via json export of microobjects
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +56,7 @@ public class Application extends javafx.application.Application {
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
         group.getChildren().add(cellGroup);
-        Cell example =  new WhiteBloodCell("example", false, 100, 100, 30, 7.5);
+        Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
