@@ -1,4 +1,4 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.cells;
 
 public enum CellType
 {

@@ -1,5 +1,8 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.cells.Cell;
+import com.cursach.dmytropakholiuk.cells.CellList;
+import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -11,11 +14,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
-
-
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.databind.ObjectWriter;
-//todo implement saving session via json export of microobjects
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +34,17 @@ public class Application extends javafx.application.Application {
             cells.get(i).delete();
         }
     }
+    public static AnimationTimer strategyTimer = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            for (Cell cell: cells){
+//                System.out.println(cell.toString()
+//                        .getStrategy()
+//                );
+                cell.getStrategy().execute();
+            }
+        }
+    };
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -47,12 +56,12 @@ public class Application extends javafx.application.Application {
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
         group.getChildren().add(cellGroup);
-        Cell example =  new WhiteBloodCell("example", false, 100, 100, 30, 7.5);
+        Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
         stage.setScene(scene);
-//        timer.start();
+        strategyTimer.start();
         stage.show();
     }
 
@@ -84,7 +93,7 @@ public class Application extends javafx.application.Application {
                 int count = 0;
                 Cell selected = null;
                 for (Cell cell: cells){
-                    if (cell.active){
+                    if (cell.isActive()){
                         selected = cell;
                         count++;
                     }
@@ -102,7 +111,13 @@ public class Application extends javafx.application.Application {
                 jsonExporter.quickSave();
             }
             if (event.getCode().equals(KeyCode.F7)){
+                Application.strategyTimer.stop();
                 jsonExporter.quickLoad();
+                for (Cell cell: cells){
+                    System.out.println(Application.jsonExporter.exportObjectAsString(cell));
+                }
+
+                Application.strategyTimer.start();
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {

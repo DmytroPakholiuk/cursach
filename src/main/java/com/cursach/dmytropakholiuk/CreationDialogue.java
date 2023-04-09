@@ -1,4 +1,8 @@
 package com.cursach.dmytropakholiuk;
+import com.cursach.dmytropakholiuk.cells.CellFactory;
+import com.cursach.dmytropakholiuk.cells.InactivePlasmodium;
+import com.cursach.dmytropakholiuk.cells.RedBloodCell;
+import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -64,18 +68,20 @@ public class CreationDialogue {
                     switch (cellType.getValue().toString()){
                         case "White blood cell":
 
-                            WhiteBloodCell cell = new WhiteBloodCell(name, _active, x, y, 30, 7.5);
+                            WhiteBloodCell whiteBloodCell = new WhiteBloodCell(name, _active, x, y, 30, 7.5);
                             break;
                         case "Red blood cell":
-                            CellFactory.createCell(CellFactory.CELLTYPE_RBC);break;
+                            RedBloodCell redBloodCell = new RedBloodCell(name, _active, x, y, 30);
+                            break;
                         case "Inactive plasmodium":
-                            CellFactory.createCell(CellFactory.CELLTYPE_INACTIVEPLAS);break;
+                            new InactivePlasmodium(name, _active, x, y, 30);break;
                         case "Plasmodium vivax":
                             CellFactory.createCell(CellFactory.CELLTYPE_PLASVIVAX);break;
                         case "HIV-plasmodium":
                             CellFactory.createCell(CellFactory.CELLTYPE_HIVPLAS);break;
                     }
                 } catch (Exception e){
+                    e.printStackTrace();
                     System.out.println("could not create a cell");
                 }
                 window.close();

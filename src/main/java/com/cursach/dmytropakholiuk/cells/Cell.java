@@ -1,12 +1,10 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.cells;
 
+import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.export.*;
+import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -17,21 +15,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Cell implements Exportable {
+public abstract class Cell implements Exportable, StrategyManageable, Deployable {
     static int newx;
     static int newy;
-    protected int x, y;
-    public int getX(){return x;}
-    public void setX(int _x)
+    public static CellType getType(Deployable cell){
+
+        if (cell instanceof RedBloodCell){
+            return CellType.RED_BLOOD_CELL;
+        }
+        if (cell instanceof WhiteBloodCell){
+            return CellType.WHITE_BLOOD_CELL;
+        }
+        if (cell instanceof HIVPlasmodium){
+            return CellType.HIV_PLASMODIUM;
+        }
+        if (cell instanceof PlasmodiumVivax){
+            return CellType.PLASMODIUM_VIVAX;
+        }
+        if (cell instanceof InactivePlasmodium){
+            return CellType.INACTIVE_PLASMODIUM;
+        }
+        return null;
+    }
+    protected double x, y;
+    public double getX(){return x;}
+    public void setX(double _x)
     {
         this.x = _x;
         this.group.setLayoutX(_x);
     }
-    public int getY(){return y;}
-    public void setY(int _y)
+    public double getY(){return y;}
+    public void setY(double _y)
     {
         this.y = _y;
         this.group.setLayoutY(_y);
+    }
+    protected double speed = 1;
+
+    public double getSpeed() {
+        return speed;
+    }
+    public void setSpeed(double _speed){
+        this.speed = _speed;
     }
 
     protected int step = 30;
@@ -112,8 +137,8 @@ public abstract class Cell implements Exportable {
         r.relocate(0, 0);
     }
     public String getPrettyString(){
-        String _x = Integer.toString(getX());
-        String _y = Integer.toString(getY());
+        String _x = Double.toString(getX());
+        String _y = Double.toString(getY());
         String _active = active ? "active" : "inactive";
 
         return "Cell "+this.name+", x="+_x+", y="+_y+", "+_active;
@@ -123,7 +148,9 @@ public abstract class Cell implements Exportable {
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
         this.group.setVisible(false);
-        this.unbindExporter(exporter);
+        this.unbindExporter();
+//        this.strategy.unbindManageable();
+        this.setStrategy(null);
     }
 
     public void moveLeft() {
@@ -150,15 +177,57 @@ public abstract class Cell implements Exportable {
     @JsonIgnore
     public Exporter exporter;
     public void bindExporter(Exporter _exporter){
+        if (_exporter != null){
+            if (_exporter.equals(this.exporter)) {
+                return;
+            }
+        }
         this.exporter = _exporter;
         _exporter.bindExportable(this);
     };
-    public void unbindExporter(Exporter _exporter){
+    public void unbindExporter(){
+        if (exporter != null) {
+            exporter.unbindExportable(this);
+        }
         this.exporter = null;
-        _exporter.unbindExportable(this);
+
     };
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
     }
+    @JsonIgnore
+    protected List<UsableStrategies> allowedStrategies;
+//            = setAllowedStrategies();
+    protected List<UsableStrategies> setAllowedStrategies(){
+        List<UsableStrategies> strategies = new ArrayList<>();
+        strategies.add(UsableStrategies.INACTIVE);
+        strategies.add(UsableStrategies.RANDOM);
 
+        return strategies;
+    }
+
+    @JsonIgnore
+    public List<UsableStrategies> getAllowedStrategies(){
+        return this.allowedStrategies;
+    }
+    @JsonIgnore
+    protected Strategy strategy;
+    public void setStrategy(Strategy strategy){
+        if (this.getAllowedStrategies().contains(Strategy.getType(strategy)) || strategy == null){
+            this.strategy = strategy;
+            if (strategy != null){
+                strategy.bindManageable(this);
+            }
+            return;
+        }
+        System.out.println("could not assign strategy "+ strategy.toString() +" to "+this.toString()+": strategy type not allowed");
+    }
+    @JsonIgnore
+    public Strategy getStrategy(){
+        return strategy;
+    }
+
+    public void setDefaultStrategy(){
+        this.setStrategy(new InactiveStrategy());
+    }
 }

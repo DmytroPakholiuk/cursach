@@ -1,12 +1,17 @@
-package com.cursach.dmytropakholiuk;
+package com.cursach.dmytropakholiuk.cells;
 
+import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.strategy.EaterStrategy;
+import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WhiteBloodCell extends Cell {
 
@@ -17,8 +22,8 @@ public class WhiteBloodCell extends Cell {
     public void setDigestTime(double _digestTime){
         digestTime = _digestTime;
     }
-    private Image image = configureImage();
-    public Image configureImage(){
+    protected Image image = configureImage();
+    protected Image configureImage(){
         System.out.println("setting image for a WBC");
         return new Image(Application.class.getResource("wbc.png").toString());
     }
@@ -64,6 +69,8 @@ public class WhiteBloodCell extends Cell {
 
 
         this.bindDefaultExporter();
+        allowedStrategies = setAllowedStrategies();
+        this.setDefaultStrategy();
 
         System.out.println("created object "+this.toString());
         System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
@@ -92,6 +99,7 @@ public class WhiteBloodCell extends Cell {
     public WhiteBloodCell clone() throws CloneNotSupportedException
     {
         WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
+        cloned.setDefaultStrategy();
 
         return cloned;
     }
@@ -105,5 +113,18 @@ public class WhiteBloodCell extends Cell {
     }
     public String toString(){
         return this.getPrettyString();
+    }
+
+    protected List<UsableStrategies> setAllowedStrategies(){
+        List<UsableStrategies> strategies = new ArrayList<>();
+        strategies.add(UsableStrategies.INACTIVE);
+        strategies.add(UsableStrategies.RANDOM);
+        strategies.add(UsableStrategies.EATER);
+
+        return strategies;
+    }
+    @Override
+    public void setDefaultStrategy() {
+        this.setStrategy(new EaterStrategy(this.digestTime));
     }
 }

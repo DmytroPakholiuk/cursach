@@ -1,7 +1,10 @@
 package com.cursach.dmytropakholiuk.export;
 
 
-import com.cursach.dmytropakholiuk.*;
+import com.cursach.dmytropakholiuk.cells.*;
+import com.cursach.dmytropakholiuk.cells.GametocytePStage;
+import com.cursach.dmytropakholiuk.cells.SchizontPStage;
+import com.cursach.dmytropakholiuk.cells.SporozoitPStage;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -15,11 +18,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = PlasmodiumVivax.class, name = "PlasmodiumVivax"),
         @JsonSubTypes.Type(value = HIVPlasmodium.class, name = "HIVPlasmodium"),
 
+        @JsonSubTypes.Type(value = SchizontPStage.class, name = "SchizontPStage"),
+        @JsonSubTypes.Type(value = SporozoitPStage.class, name = "SporozoitPStage"),
+        @JsonSubTypes.Type(value = GametocytePStage.class, name = "GametocytePStage"),
+
+
         @JsonSubTypes.Type(value = Save.class, name = "Save"),
 }
 )
 public interface Exportable {
     public void bindExporter(Exporter exporter);
-    public void unbindExporter(Exporter exporter);
+    public void unbindExporter();
     public Exporter exporter = null;
 }
