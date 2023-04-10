@@ -72,7 +72,7 @@ public class Application extends javafx.application.Application {
     private class KeyPressedHandler implements EventHandler<KeyEvent> {
         public void handle(KeyEvent event) {
 
-            if (event.getCode().equals(KeyCode.N)) {
+            if (event.getCode().equals(KeyCode.N) || event.getCode().equals(KeyCode.INSERT)) {
                 CreationDialogue dialogue = new CreationDialogue();
             }
 
