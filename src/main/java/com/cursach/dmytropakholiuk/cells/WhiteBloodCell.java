@@ -57,16 +57,15 @@ public class WhiteBloodCell extends Cell {
         this.setDigestTime(_digestTime);
 
 
-        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                setActive(!active);
-            }
-        });
+//        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//
+//            @Override
+//            public void handle(MouseEvent event) {
+//                setActive(!active);
+//            }
+//        });
         Application.cells.add(this);
         Application.cellGroup.getChildren().add(this.group);
-
 
         this.bindDefaultExporter();
         allowedStrategies = setAllowedStrategies();
@@ -99,14 +98,19 @@ public class WhiteBloodCell extends Cell {
     public WhiteBloodCell clone() throws CloneNotSupportedException
     {
         WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
-        cloned.setDefaultStrategy();
+//        cloned.setDefaultStrategy();
+
+        configureClone(cloned);
+        cloned.setActive(this.isActive());
 
         return cloned;
     }
     public boolean equals(Object o){
         if (o instanceof WhiteBloodCell){
             if (((WhiteBloodCell) o).name.equals(this.name)){
-                return true;
+                if (o.hashCode() == this.hashCode()){
+                    return true;
+                }
             }
         }
         return false;

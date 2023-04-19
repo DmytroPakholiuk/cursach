@@ -1,17 +1,17 @@
 package com.cursach.dmytropakholiuk;
 
+import com.cursach.dmytropakholiuk.cells.*;
 import com.cursach.dmytropakholiuk.cells.Cell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
+
+import java.nio.file.Watchable;
 
 public class ModificationDialogue {
 
@@ -44,6 +44,24 @@ public class ModificationDialogue {
 
 
         CheckBox active = new CheckBox("Active");
+
+        Label labelDigest = new Label("[WBC only] Digest time: ");
+        labelDigest.setFont(new Font(20));
+        TextField textFieldDigest = new TextField();
+        textFieldDigest.setFont(new Font(20));
+
+        Label labelPstage = new Label("[Plasmodium only] Plasmodium stage: ");
+        labelDigest.setFont(new Font(20));
+        ComboBox pStage = new ComboBox<>();
+        pStage.setMinWidth(200);
+        pStage.getItems().addAll(
+                "Schizont",
+                "Gametocyte",
+                "Sporozoit"
+        );
+        pStage.setPromptText("Select Stage: ");
+
+
         Button submit = new Button("Submit");
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -57,7 +75,7 @@ public class ModificationDialogue {
                 } catch (Exception e){
 
                 }
-                Double y = modifiedCell.getY();
+                double y = modifiedCell.getY();
                 try {
                     y = Double.parseDouble(textFieldY.getText());
                 } catch (Exception e){
@@ -70,6 +88,29 @@ public class ModificationDialogue {
                 modifiedCell.setX(x);
                 modifiedCell.setY(y);
 
+                if (cell instanceof WhiteBloodCell){
+                    double digestTime = ((WhiteBloodCell)modifiedCell).getDigestTime();
+                    try {
+                        digestTime = Double.parseDouble(textFieldDigest.getText());
+                    } catch (Exception e){
+
+                    }
+                    ((WhiteBloodCell) modifiedCell).setDigestTime(digestTime);
+                }
+                if (cell instanceof InactivePlasmodium){
+                    PStage stage = ((InactivePlasmodium)cell).getStage();
+                    switch (pStage.getValue().toString()){
+                        case "Schizont":
+                            stage = new SchizontPStage(); break;
+                        case "Gametocyte":
+                            stage = new GametocytePStage(); break;
+                        case "Sporozoit":
+                            stage = new SporozoitPStage(); break;
+                    }
+
+                    ((InactivePlasmodium)cell).bindStage(stage);
+                }
+
                 window.close();
             }
         });
@@ -80,10 +121,17 @@ public class ModificationDialogue {
                 labelName, textFieldName,
                 labelX, textFieldX,
                 labelY, textFieldY,
-                active,
-                submit
+                active
         );
-        Scene scene = new Scene(layout, 400, 350);
+        if (cell instanceof WhiteBloodCell){
+            layout.getChildren().addAll(labelDigest, textFieldDigest);
+        }
+        if (cell instanceof InactivePlasmodium){
+            layout.getChildren().addAll(labelPstage, pStage);
+        }
+        layout.getChildren().add(submit);
+
+        Scene scene = new Scene(layout, 400, 600);
         window.setScene(scene);
         window.showAndWait();
 

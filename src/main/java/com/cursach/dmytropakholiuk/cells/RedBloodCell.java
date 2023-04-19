@@ -50,13 +50,13 @@ public class RedBloodCell extends Cell implements Cloneable{
         this.setStep(_step);
 
 
-        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                setActive(!active);
-            }
-        });
+//        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//
+//            @Override
+//            public void handle(MouseEvent event) {
+//                setActive(!active);
+//            }
+//        });
         Application.cells.add(this);
         Application.cellGroup.getChildren().add(this.group);
 
@@ -86,17 +86,22 @@ public class RedBloodCell extends Cell implements Cloneable{
         return super.getPrettyString();
     }
 
-    public WhiteBloodCell clone() throws CloneNotSupportedException
+    public RedBloodCell clone() throws CloneNotSupportedException
     {
-        WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
-        cloned.setDefaultStrategy();
+        RedBloodCell cloned = (RedBloodCell) super.clone();
+        configureClone(cloned);
+        cloned.setActive(this.isActive());
+        cloned.bindDefaultExporter();
+
 
         return cloned;
     }
     public boolean equals(Object o){
         if (o instanceof RedBloodCell){
             if (((RedBloodCell) o).name.equals(this.name)){
-                return true;
+                if (o.hashCode() == this.hashCode()){
+                    return true;
+                }
             }
         }
         return false;

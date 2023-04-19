@@ -72,7 +72,7 @@ public class Application extends javafx.application.Application {
     private class KeyPressedHandler implements EventHandler<KeyEvent> {
         public void handle(KeyEvent event) {
 
-            if (event.getCode().equals(KeyCode.N)) {
+            if (event.getCode().equals(KeyCode.N) || event.getCode().equals(KeyCode.INSERT)) {
                 CreationDialogue dialogue = new CreationDialogue();
             }
 
@@ -100,6 +100,26 @@ public class Application extends javafx.application.Application {
                 }
                 if (count == 1){
                     ModificationDialogue dialogue = new ModificationDialogue(selected);
+                } else {
+
+                }
+            }
+            if (event.getCode().equals(KeyCode.K)){
+                int count = 0;
+                Cell selected = null;
+                for (Cell cell: cells){
+                    if (cell.isActive()){
+                        selected = cell;
+                        count++;
+                    }
+                }
+                if (count == 1){
+//                    ModificationDialogue dialogue = new ModificationDialogue(selected, true);
+                    try {
+                        selected.clone();
+                    } catch (CloneNotSupportedException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
 
                 }

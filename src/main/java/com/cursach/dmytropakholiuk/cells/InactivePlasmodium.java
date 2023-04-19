@@ -5,6 +5,7 @@ import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -53,13 +54,13 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         this.setStep(_step);
 
 
-        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                setActive(!active);
-            }
-        });
+//        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//
+//            @Override
+//            public void handle(MouseEvent event) {
+//                setActive(!active);
+//            }
+//        });
         Application.cells.add(this);
         Application.cellGroup.getChildren().add(this.group);
 
@@ -92,8 +93,37 @@ public class InactivePlasmodium extends Cell implements Cloneable{
     public void bindStage(PStage stage){
 //        System.out.println(stage.toString());
 //        throw new RuntimeException("asasdadasadadsadsdadasdasasd");
+
         stage.plasmodium = this;
         this.stage = stage;
+
+//        this.image = configureImage();
+//        if (this.group != null){
+//            this.group.setVisible(false);
+//        }
+//        Application.cellGroup.getChildren().remove(this.group);
+//        this.configureGroup();
+//        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                setActive(!active);
+//            }
+//        });
+//        Application.cellGroup.getChildren().add(this.group);
+
+        this.image = configureImage();
+        if (this.group != null){
+            this.imageView.setVisible(false);
+            this.group.getChildren().remove(imageView);
+            this.imageView = new ImageView(image);
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            imageView.setPreserveRatio(true);
+            this.group.getChildren().add(imageView);
+
+
+            imageView.relocate(15, 15);
+        }
 
         allowedStrategies = setAllowedStrategies();
         this.setDefaultStrategy();
@@ -111,17 +141,24 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         return super.getPrettyString();
     }
 
-    public WhiteBloodCell clone() throws CloneNotSupportedException
+    public InactivePlasmodium clone() throws CloneNotSupportedException
     {
-        WhiteBloodCell cloned = (WhiteBloodCell) super.clone();
-        cloned.setDefaultStrategy();
+        InactivePlasmodium cloned = (InactivePlasmodium) super.clone();
+
+        cloned.configureClone(cloned);
+        cloned.bindStage(PStage.createPStageByType(PStage.getPStageType(this.getStage())));
+        cloned.setActive(this.isActive());
+        cloned.bindDefaultExporter();
+
 
         return cloned;
     }
     public boolean equals(Object o){
         if (o instanceof InactivePlasmodium){
             if (((InactivePlasmodium) o).name.equals(this.name)){
-                return true;
+                if (o.hashCode() == this.hashCode()){
+                    return true;
+                }
             }
         }
         return false;
