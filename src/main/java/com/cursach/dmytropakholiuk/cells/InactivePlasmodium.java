@@ -148,6 +148,8 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         cloned.configureClone(cloned);
         cloned.bindStage(PStage.createPStageByType(PStage.getPStageType(this.getStage())));
         cloned.setActive(this.isActive());
+        cloned.bindDefaultExporter();
+
 
         return cloned;
     }

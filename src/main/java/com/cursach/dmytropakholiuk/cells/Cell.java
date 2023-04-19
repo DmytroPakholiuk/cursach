@@ -187,6 +187,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         cloned.allowedStrategies = setAllowedStrategies();
         cloned.setDefaultStrategy();
 
+        cloned.bindDefaultExporter();
+        cloned.exporter.bindExportable(cloned);
     }
 
     public void moveLeft() {

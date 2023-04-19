@@ -91,6 +91,8 @@ public class RedBloodCell extends Cell implements Cloneable{
         RedBloodCell cloned = (RedBloodCell) super.clone();
         configureClone(cloned);
         cloned.setActive(this.isActive());
+        cloned.bindDefaultExporter();
+
 
         return cloned;
     }
