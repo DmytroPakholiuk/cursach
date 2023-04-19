@@ -104,6 +104,26 @@ public class Application extends javafx.application.Application {
 
                 }
             }
+            if (event.getCode().equals(KeyCode.K)){
+                int count = 0;
+                Cell selected = null;
+                for (Cell cell: cells){
+                    if (cell.isActive()){
+                        selected = cell;
+                        count++;
+                    }
+                }
+                if (count == 1){
+//                    ModificationDialogue dialogue = new ModificationDialogue(selected, true);
+                    try {
+                        selected.clone();
+                    } catch (CloneNotSupportedException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+
+                }
+            }
             if (event.getCode().equals(KeyCode.L)){
                 CellList cellList = new CellList();
             }

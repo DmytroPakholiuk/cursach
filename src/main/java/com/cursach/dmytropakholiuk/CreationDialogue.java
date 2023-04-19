@@ -1,8 +1,6 @@
 package com.cursach.dmytropakholiuk;
-import com.cursach.dmytropakholiuk.cells.CellFactory;
-import com.cursach.dmytropakholiuk.cells.InactivePlasmodium;
-import com.cursach.dmytropakholiuk.cells.RedBloodCell;
-import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
+import com.cursach.dmytropakholiuk.cells.*;
+import com.cursach.dmytropakholiuk.strategy.Strategy;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -45,6 +43,24 @@ public class CreationDialogue {
                 "HIV-plasmodium"
         );
         cellType.setPromptText("Cell type: ");
+
+        Label labelDigest = new Label("[WBC only] Digest time: ");
+        labelDigest.setFont(new Font(20));
+        TextField textFieldDigest = new TextField();
+        textFieldDigest.setFont(new Font(20));
+
+        Label labelPstage = new Label("[Plasmodium only] Plasmodium stage: ");
+        labelDigest.setFont(new Font(20));
+        ComboBox pStage = new ComboBox<>();
+        pStage.setMinWidth(200);
+        pStage.getItems().addAll(
+                "Schizont",
+                "Gametocyte",
+                "Sporozoit"
+        );
+        pStage.setPromptText("Select Stage: ");
+
+
         Button submit = new Button("Submit");
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -67,14 +83,31 @@ public class CreationDialogue {
                 try {
                     switch (cellType.getValue().toString()){
                         case "White blood cell":
+                            double digestTime = 7.5;
+                            try {
+                                digestTime = Double.parseDouble(textFieldDigest.getText());
+                            }catch (Exception e){
+                            }
 
-                            WhiteBloodCell whiteBloodCell = new WhiteBloodCell(name, _active, x, y, 30, 7.5);
+                            WhiteBloodCell whiteBloodCell = new WhiteBloodCell(name, _active, x, y, 30, digestTime);
                             break;
                         case "Red blood cell":
                             RedBloodCell redBloodCell = new RedBloodCell(name, _active, x, y, 30);
                             break;
                         case "Inactive plasmodium":
-                            new InactivePlasmodium(name, _active, x, y, 30);break;
+                            PStage stage = null;
+                            switch (pStage.getValue().toString()){
+                                case "Schizont":
+                                    stage = new SchizontPStage(); break;
+                                case "Gametocyte":
+                                    stage = new GametocytePStage(); break;
+                                case "Sporozoit":
+                                    stage = new SporozoitPStage(); break;
+                            }
+
+                            InactivePlasmodium plasmodium = new InactivePlasmodium(name, _active, x, y, 30);
+                            plasmodium.bindStage(stage);
+                            break;
                         case "Plasmodium vivax":
                             CellFactory.createCell(CellFactory.CELLTYPE_PLASVIVAX);break;
                         case "HIV-plasmodium":
@@ -97,9 +130,11 @@ public class CreationDialogue {
                 labelY, textFieldY,
                 cellType,
                 active,
+                labelDigest, textFieldDigest,
+                labelPstage, pStage,
                 submit
         );
-        Scene scene = new Scene(layout, 400, 350);
+        Scene scene = new Scene(layout, 400, 600);
         window.setScene(scene);
         window.showAndWait();
 

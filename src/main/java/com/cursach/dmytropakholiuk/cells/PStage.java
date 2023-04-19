@@ -12,6 +12,35 @@ import javafx.scene.image.Image;
 import java.util.List;
 
 public abstract class PStage implements Exportable {
+
+    protected enum PStageType{
+        SCHIZONT_PSTAGE, GAMETOCYTE_PSTAGE, SPOROZOIT_PSTAGE
+    }
+    public static PStageType getPStageType(PStage stage){
+        if (stage instanceof SporozoitPStage){
+            return PStageType.SPOROZOIT_PSTAGE;
+        }
+        if (stage instanceof SchizontPStage){
+            return PStageType.SCHIZONT_PSTAGE;
+        }
+        if (stage instanceof GametocytePStage){
+            return PStageType.GAMETOCYTE_PSTAGE;
+        }
+        throw new RuntimeException();
+    }
+    public static PStage createPStageByType(PStageType type){
+        PStage stage = null;
+        switch (type){
+            case SCHIZONT_PSTAGE:
+                stage = new SchizontPStage(); break;
+            case SPOROZOIT_PSTAGE:
+                stage = new SporozoitPStage(); break;
+            case GAMETOCYTE_PSTAGE:
+                stage = new GametocytePStage(); break;
+        }
+        return stage;
+    }
+
     @JsonIgnore
     protected Image image;
     abstract protected void configureImage();
@@ -47,5 +76,6 @@ public abstract class PStage implements Exportable {
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
     }
+
 
 }

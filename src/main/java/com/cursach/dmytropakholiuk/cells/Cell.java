@@ -4,9 +4,11 @@ import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.export.*;
 import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Cell implements Exportable, StrategyManageable, Deployable {
+public abstract class Cell implements Exportable, StrategyManageable, Deployable, Cloneable {
     static int newx;
     static int newy;
     public static CellType getType(Deployable cell){
@@ -135,6 +137,14 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         imageView.relocate(15, 15);
         shownName.relocate(0, 0);
         r.relocate(0, 0);
+
+        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                setActive(!active);
+            }
+        });
     }
     public String getPrettyString(){
         String _x = Double.toString(getX());
@@ -145,12 +155,38 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     }
 
     public void delete(){
+        Application.strategyTimer.stop();
+
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
         this.group.setVisible(false);
         this.unbindExporter();
 //        this.strategy.unbindManageable();
         this.setStrategy(null);
+
+        Application.strategyTimer.start();
+
+    }
+    public Cell clone() throws CloneNotSupportedException{
+        Cell cloned = (Cell)super.clone();
+        cloned.setDefaultStrategy();
+
+        return cloned;
+    }
+    protected void configureClone(Cell cloned){
+        cloned.shownName = new Text(cloned.name);
+
+        cloned.configureGroup();
+        Application.cells.add(cloned);
+        Application.cellGroup.getChildren().add(cloned.group);
+
+        cloned.setX(cloned.getX() - 100);
+        cloned.setY(cloned.getY() - 100);
+
+        cloned.bindDefaultExporter();
+        cloned.allowedStrategies = setAllowedStrategies();
+        cloned.setDefaultStrategy();
+
     }
 
     public void moveLeft() {
