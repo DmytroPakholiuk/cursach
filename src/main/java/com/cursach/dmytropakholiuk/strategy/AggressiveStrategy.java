@@ -30,10 +30,12 @@ public abstract class AggressiveStrategy extends ActiveStrategy{
     }
     public void chooseTarget(){
         for (Cell target: Application.cells){
-            if (isHostile(target)){
-                if (targetInRange(target, aggressionRange)){
-                    this.setTarget(target);
-                    return;
+            if (target.isVisible()){
+                if (isHostile(target)){
+                    if (targetInRange(target, aggressionRange)){
+                        this.setTarget(target);
+                        return;
+                    }
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.export.*;
+import com.cursach.dmytropakholiuk.organs.Organ;
 import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
@@ -103,6 +104,10 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     }
     @JsonIgnore
     protected Group group;
+    @JsonIgnore
+    public Group getGroup() {
+        return group;
+    }
 
     protected boolean active = false;
     public void setActive(boolean a) {
@@ -121,12 +126,36 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         return active;
     }
 
-    public boolean visible;
+    protected boolean visible = true;
     public boolean isVisible(){
         return visible;
-    };
+    }
     public void setVisible(boolean visible){
         this.visible = visible;
+        this.group.setVisible(visible);
+    }
+
+    @JsonIgnore
+    public Organ organ = Application.nullOrgan;
+    public void enterOrgan(){
+        Organ organ1 = Application.nullOrgan;
+        if (this.group.getBoundsInParent().intersects(Application.anopheles.getGroup().getBoundsInParent())){
+            organ1 = Application.anopheles;
+        }
+//        System.out.println(this.toString() + " ENTERED ORGAN " + organ1.toString());
+        Application.anopheles.acceptCell(this);
+        Application.refreshScreen();
+        this.organ = organ1;
+    }
+    public void quitOrgan(){
+        if (!(this.organ instanceof Organ.NullOrgan)){
+            organ.moveOutside(this);
+            Application.refreshScreen();
+            this.organ = Application.nullOrgan;
+        }
+    }
+    public boolean inOrgan(Organ organ1){
+        return organ1.equals(this.organ);
     }
 
 
@@ -149,6 +178,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         r.relocate(0, 0);
 
         group.toFront();
+        group.setManaged(false);
 
         this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 

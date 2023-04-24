@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk.organs;
 
+import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.cells.Cell;
 import com.cursach.dmytropakholiuk.cells.CellType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Organ {
+
+    public static class NullOrgan extends Organ{
+        @Override
+        public boolean canEnter(Cell cell) {
+            return true;
+        }
+    }
 
     protected double x, y;
     public double getX(){return x;}
@@ -51,6 +59,10 @@ public abstract class Organ {
     }
 
     protected Group group;
+    @JsonIgnore
+    public Group getGroup() {
+        return group;
+    }
     protected void configureGroup()
     {
         ImageView imageView = new ImageView(getImage());
@@ -74,7 +86,36 @@ public abstract class Organ {
 
     }
 
-    public List<Cell> tenants = new ArrayList<Cell>();
+    public void acceptCell(Cell cell){
+        if (this.canEnter(cell)){
+            this.moveInside(cell);
+        }
+    }
+    protected void moveInside(Cell cell){
+        if (!this.tenants.contains(cell)){
+            cell.setX(this.getX());
+            cell.setY(this.getY());
+            cell.setActive(false);
+
+            Application.cellGroup.getChildren().remove(cell.getGroup());
+            cell.setVisible(false);
+
+            this.tenants.add(cell);
+        }
+    }
+    public void moveOutside(Cell cell){
+        if (this.tenants.contains(cell)){
+            cell.setX(this.getX());
+            cell.setY(this.getY());
+
+            Application.cellGroup.getChildren().add(cell.getGroup());
+            cell.setVisible(true);
+
+            this.tenants.remove(cell);
+        }
+    }
+
+    public List<Cell> tenants = new ArrayList<>();
     public abstract boolean canEnter(Cell cell);
 //    public boolean canEnter(CellType cellType){
 //

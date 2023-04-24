@@ -22,8 +22,10 @@ public class EaterStrategy extends MeeleeStrategy{
     }
 
     public void execute(){
-        super.execute();
-        attack();
+        if (manageable.isVisible()){
+            super.execute();
+            attack();
+        }
     }
 
     public EaterStrategy(double digestTime, double range, Deployable target){

@@ -8,4 +8,5 @@ public interface Deployable {
     void setX(double _x);
     void setY(double _y);
     void delete();
+    boolean isVisible();
 }
