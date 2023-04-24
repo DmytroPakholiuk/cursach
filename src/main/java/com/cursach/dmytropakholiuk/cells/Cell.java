@@ -120,6 +120,16 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     {
         return active;
     }
+
+    public boolean visible;
+    public boolean isVisible(){
+        return visible;
+    };
+    public void setVisible(boolean visible){
+        this.visible = visible;
+    }
+
+
     protected void configureGroup()
     {
         ImageView imageView = new ImageView(getImage());
@@ -137,6 +147,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         imageView.relocate(15, 15);
         shownName.relocate(0, 0);
         r.relocate(0, 0);
+
+        group.toFront();
 
         this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 

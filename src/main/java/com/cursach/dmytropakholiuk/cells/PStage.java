@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class PStage implements Exportable {
 
-    protected enum PStageType{
+    public enum PStageType{
         SCHIZONT_PSTAGE, GAMETOCYTE_PSTAGE, SPOROZOIT_PSTAGE
     }
     public static PStageType getPStageType(PStage stage){

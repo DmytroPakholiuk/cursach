@@ -4,6 +4,9 @@ import com.cursach.dmytropakholiuk.cells.Cell;
 import com.cursach.dmytropakholiuk.cells.CellList;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
+import com.cursach.dmytropakholiuk.organs.Anopheles;
+import com.cursach.dmytropakholiuk.organs.Liver;
+import com.cursach.dmytropakholiuk.organs.Marrow;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -27,8 +30,13 @@ public class Application extends javafx.application.Application {
     public static ScrollPane scrollPane;
     public static Group group = new Group();
     public static Group cellGroup = new Group();
+    public static Group organGroup = new Group();
 //    public static Cell[] cells = new Cell[0];
     public static List<Cell> cells = new ArrayList<>();
+
+    public static Anopheles anopheles;
+    public static Liver liver;
+    public static Marrow marrow;
     public static void truncateCells(){
         for (int i = cells.toArray().length - 1; i >= 0; i--){
             cells.get(i).delete();
@@ -55,8 +63,14 @@ public class Application extends javafx.application.Application {
 //        scrollPane.setFitToWidth(true);
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
+        group.getChildren().add(organGroup);
         group.getChildren().add(cellGroup);
+
+
+        Anopheles anopheles = new Anopheles(300, 300);
         Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
+
+
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
