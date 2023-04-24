@@ -1,6 +1,7 @@
-package com.cursach.dmytropakholiuk.cells;
+package com.cursach.dmytropakholiuk;
 
 import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.cells.Cell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;

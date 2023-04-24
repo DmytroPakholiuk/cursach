@@ -2,23 +2,26 @@ package com.cursach.dmytropakholiuk.organs;
 
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.cells.Cell;
-import com.cursach.dmytropakholiuk.cells.CellType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Base organ functionality class.
+ */
 public abstract class Organ {
 
+    /**
+     * Null-object nested class. Better than carrying all those NullPointers, eh?
+     */
     public static class NullOrgan extends Organ{
         @Override
         public boolean canEnter(Cell cell) {
@@ -53,7 +56,11 @@ public abstract class Organ {
         this.shownText.setText(text);
     }
     public Rectangle r;
+
     protected Color rColour;
+    /**
+     * Is overwritten in subclasses
+     */
     public Color getrRColour(){
         return rColour;
     }
@@ -63,6 +70,10 @@ public abstract class Organ {
     public Group getGroup() {
         return group;
     }
+
+    /**
+     * Basic group configuration for graphics
+     */
     protected void configureGroup()
     {
         ImageView imageView = new ImageView(getImage());
@@ -116,6 +127,12 @@ public abstract class Organ {
     }
 
     public List<Cell> tenants = new ArrayList<>();
+
+    /**
+     * validates if a cell can enter the Organ. Each subclass can define their own rules
+     * @param cell
+     * @return
+     */
     public abstract boolean canEnter(Cell cell);
 //    public boolean canEnter(CellType cellType){
 //

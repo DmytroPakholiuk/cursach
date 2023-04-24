@@ -12,6 +12,10 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
+
+/**
+ * The main difference of plasmodia is that they have most of their defining features delegated to PStage
+ */
 public class InactivePlasmodium extends Cell implements Cloneable{
 
 

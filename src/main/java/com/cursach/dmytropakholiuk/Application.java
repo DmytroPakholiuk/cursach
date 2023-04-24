@@ -1,7 +1,6 @@
 package com.cursach.dmytropakholiuk;
 
 import com.cursach.dmytropakholiuk.cells.Cell;
-import com.cursach.dmytropakholiuk.cells.CellList;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
 import com.cursach.dmytropakholiuk.organs.Anopheles;

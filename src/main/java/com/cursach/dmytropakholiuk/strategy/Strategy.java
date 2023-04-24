@@ -1,5 +1,9 @@
 package com.cursach.dmytropakholiuk.strategy;
 
+
+/**
+ * Subclasses define automatic behaviour of cells
+ */
 public abstract class Strategy {
 
     public static UsableStrategies getType(Strategy strategy){
@@ -25,6 +29,10 @@ public abstract class Strategy {
         NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
     }
     public StrategyManageable manageable;
+
+    /**
+     * Main method that gets called all the time
+     */
     public abstract void execute();
     public void bindManageable(StrategyManageable manageable){
         this.manageable = manageable;

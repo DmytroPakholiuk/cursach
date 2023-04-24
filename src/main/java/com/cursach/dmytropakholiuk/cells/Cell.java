@@ -135,6 +135,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.group.setVisible(visible);
     }
 
+    /**
+     * Organ it is inside right now
+     */
     @JsonIgnore
     public Organ organ = Application.nullOrgan;
     public void enterOrgan(){
@@ -154,11 +157,19 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             this.organ = Application.nullOrgan;
         }
     }
+
+    /**
+     * Checks if this cell is inside an organ
+     * @param organ1
+     * @return
+     */
     public boolean inOrgan(Organ organ1){
         return organ1.equals(this.organ);
     }
 
-
+    /**
+     * Basic group configuration for graphics
+     */
     protected void configureGroup()
     {
         ImageView imageView = new ImageView(getImage());
@@ -178,7 +189,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         r.relocate(0, 0);
 
         group.toFront();
-        group.setManaged(false);
+//        group.setManaged(false);
 
         this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -188,6 +199,11 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             }
         });
     }
+
+    /**
+     * returns a "presentable" string for this object
+     * @return
+     */
     public String getPrettyString(){
         String _x = Double.toString(getX());
         String _y = Double.toString(getY());
@@ -254,6 +270,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         setY(y);
     }
 
+    /**
+     * Usually JSONExporter, but you can change that
+     */
     @JsonIgnore
     public Exporter exporter;
     public void bindExporter(Exporter _exporter){
@@ -272,12 +291,21 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.exporter = null;
 
     };
+
+    /**
+     * Change this method if you wish to bind a different exporter as default
+     */
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
     }
     @JsonIgnore
     protected List<UsableStrategies> allowedStrategies;
 //            = setAllowedStrategies();
+
+    /**
+     * a method that sets which strategies are allowed for the object. Has to be overwritten in subclasses
+     * @return
+     */
     protected List<UsableStrategies> setAllowedStrategies(){
         List<UsableStrategies> strategies = new ArrayList<>();
         strategies.add(UsableStrategies.INACTIVE);

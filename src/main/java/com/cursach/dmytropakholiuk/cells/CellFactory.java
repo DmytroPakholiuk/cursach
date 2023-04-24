@@ -1,5 +1,9 @@
 package com.cursach.dmytropakholiuk.cells;
 
+
+/**
+ * Unfinished Factory. Has no real use as it would probably violate the "demands"
+ */
 public class CellFactory {
 
     public static final int CELLTYPE_WBC = 1;
