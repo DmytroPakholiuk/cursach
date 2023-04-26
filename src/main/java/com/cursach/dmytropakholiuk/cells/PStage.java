@@ -11,9 +11,15 @@ import javafx.scene.image.Image;
 
 import java.util.List;
 
+/**
+ * It defines what looks and behaviour will plasmodia have
+ */
 public abstract class PStage implements Exportable {
 
-    protected enum PStageType{
+    /**
+     * Type enum for type comparison
+     */
+    public enum PStageType{
         SCHIZONT_PSTAGE, GAMETOCYTE_PSTAGE, SPOROZOIT_PSTAGE
     }
     public static PStageType getPStageType(PStage stage){
@@ -52,6 +58,9 @@ public abstract class PStage implements Exportable {
     public InactivePlasmodium plasmodium;
     @JsonIgnore
     public Strategy strategy;
+    /**
+     * n has no real use except it allows to fake some info for exporter
+     */
     public int n = 1;
     abstract public List<UsableStrategies> allowedStrategies();
     abstract public Strategy defaultStrategy();

@@ -1,6 +1,7 @@
-package com.cursach.dmytropakholiuk.cells;
+package com.cursach.dmytropakholiuk;
 
 import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.cells.Cell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -38,6 +39,7 @@ public class CellList {
 
         Button submit = new Button("Select");
         Button delete = new Button("Delete");
+        Button extract = new Button("Extract");
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -60,10 +62,21 @@ public class CellList {
                 window.close();
             }
         });
+        extract.setOnAction(actionEvent -> {
+            for (CellBox cellBox: selectCells){
+                if (cellBox.isSelected()){
+                    cellBox.relatedCell.quitOrgan();
+                }
+            }
+            System.out.println(Application.anopheles.tenants);
+
+            window.close();
+        });
 
         layout.getChildren().addAll(
                 submit,
-                delete
+                delete,
+                extract
         );
         Scene scene = new Scene(layout, 400, 350);
         window.setScene(scene);

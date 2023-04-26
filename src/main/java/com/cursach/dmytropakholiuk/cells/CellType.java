@@ -1,5 +1,8 @@
 package com.cursach.dmytropakholiuk.cells;
 
+/**
+ * contains possible cell types for easier type comparison
+ */
 public enum CellType
 {
     WHITE_BLOOD_CELL ,

@@ -1,6 +1,8 @@
 package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
+import com.cursach.dmytropakholiuk.organs.Organ;
+import com.cursach.dmytropakholiuk.organs.OrganType;
 import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
@@ -12,6 +14,10 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
+
+/**
+ * The main difference of plasmodia is that they have most of their defining features delegated to PStage
+ */
 public class InactivePlasmodium extends Cell implements Cloneable{
 
 
@@ -34,7 +40,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         return rColour;
     }
 
-    public InactivePlasmodium(String _name, boolean _active, int _x, int _y, int _step)
+    public InactivePlasmodium(String _name, boolean _active, int _x, int _y, int _step, OrganType oType)
     {
         System.out.println("called specified InactivePlasmodium constructor\n");
 
@@ -69,6 +75,8 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         allowedStrategies = setAllowedStrategies();
         this.setDefaultStrategy();
 
+        this.enterOrgan(Organ.getOrganByType(oType));
+
 
         System.out.println("created object "+this.toString());
         System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
@@ -79,7 +87,8 @@ public class InactivePlasmodium extends Cell implements Cloneable{
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
 
                 0,0,
-                30);
+                30,
+                OrganType.ORGANTYPE_NULLORGAN);
 
         System.out.println("...via default InactivePlasmodium constructor\n");
     }

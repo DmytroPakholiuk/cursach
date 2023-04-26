@@ -2,6 +2,8 @@ package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.export.*;
+import com.cursach.dmytropakholiuk.organs.Organ;
+import com.cursach.dmytropakholiuk.organs.OrganType;
 import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
@@ -103,6 +105,10 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     }
     @JsonIgnore
     protected Group group;
+    @JsonIgnore
+    public Group getGroup() {
+        return group;
+    }
 
     protected boolean active = false;
     public void setActive(boolean a) {
@@ -120,6 +126,75 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     {
         return active;
     }
+
+    protected boolean visible = true;
+    public boolean isVisible(){
+        return visible;
+    }
+    public void setVisible(boolean visible){
+        this.visible = visible;
+        this.group.setVisible(visible);
+    }
+
+    /**
+     * Organ it is inside right now
+     */
+    @JsonIgnore
+    public Organ organ = Application.nullOrgan;
+    protected OrganType organType = OrganType.ORGANTYPE_NULLORGAN;
+    public void setOrganType(OrganType organType){
+        this.organType = organType;
+        this.enterOrgan(Organ.getOrganByType(organType));
+    }
+    public OrganType getOrganType() {
+        return organType;
+    }
+
+    public void enterOrgan(){
+        Organ organ1 = Application.nullOrgan;
+        if (this.group.getBoundsInParent().intersects(Application.anopheles.getGroup().getBoundsInParent())){
+            organ1 = Application.anopheles;
+        }
+        if (this.group.getBoundsInParent().intersects(Application.liver.getGroup().getBoundsInParent())){
+            organ1 = Application.liver;
+        }
+        if (this.group.getBoundsInParent().intersects(Application.marrow.getGroup().getBoundsInParent())){
+            organ1 = Application.marrow;
+        }
+//        System.out.println(this.toString() + " ENTERED ORGAN " + organ1.toString());
+        organ1.acceptCell(this);
+        Application.refreshScreen();
+        this.organ = organ1;
+        this.organType = Organ.getOrganType(this.organ);
+    }
+    public void enterOrgan(Organ organ1) {
+        organ1.acceptCell(this);
+        Application.refreshScreen();
+        this.organ = organ1;
+        this.organType = Organ.getOrganType(this.organ);
+    }
+    public void quitOrgan(){
+        if (!(this.organ instanceof Organ.NullOrgan)){
+            this.setVisible(true);
+            organ.moveOutside(this);
+            Application.refreshScreen();
+            this.organ = Application.nullOrgan;
+            this.organType = Organ.getOrganType(this.organ);
+        }
+    }
+
+    /**
+     * Checks if this cell is inside an organ
+     * @param organ1
+     * @return
+     */
+    public boolean inOrgan(Organ organ1){
+        return organ1.equals(this.organ);
+    }
+
+    /**
+     * Basic group configuration for graphics
+     */
     protected void configureGroup()
     {
         ImageView imageView = new ImageView(getImage());
@@ -138,6 +213,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         shownName.relocate(0, 0);
         r.relocate(0, 0);
 
+        group.toFront();
+//        group.setManaged(false);
+
         this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -146,16 +224,23 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             }
         });
     }
+
+    /**
+     * returns a "presentable" string for this object
+     * @return
+     */
     public String getPrettyString(){
         String _x = Double.toString(getX());
         String _y = Double.toString(getY());
         String _active = active ? "active" : "inactive";
 
-        return "Cell "+this.name+", x="+_x+", y="+_y+", "+_active;
+        return "Cell "+this.name+", INSIDE "+this.organType+", x="+_x+", y="+_y+", "+_active;
     }
 
     public void delete(){
         Application.strategyTimer.stop();
+
+        this.quitOrgan();
 
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
@@ -212,6 +297,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         setY(y);
     }
 
+    /**
+     * Usually JSONExporter, but you can change that
+     */
     @JsonIgnore
     public Exporter exporter;
     public void bindExporter(Exporter _exporter){
@@ -230,12 +318,21 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.exporter = null;
 
     };
+
+    /**
+     * Change this method if you wish to bind a different exporter as default
+     */
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
     }
     @JsonIgnore
     protected List<UsableStrategies> allowedStrategies;
 //            = setAllowedStrategies();
+
+    /**
+     * a method that sets which strategies are allowed for the object. Has to be overwritten in subclasses
+     * @return
+     */
     protected List<UsableStrategies> setAllowedStrategies(){
         List<UsableStrategies> strategies = new ArrayList<>();
         strategies.add(UsableStrategies.INACTIVE);

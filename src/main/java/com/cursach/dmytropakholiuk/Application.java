@@ -1,9 +1,12 @@
 package com.cursach.dmytropakholiuk;
 
 import com.cursach.dmytropakholiuk.cells.Cell;
-import com.cursach.dmytropakholiuk.cells.CellList;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
+import com.cursach.dmytropakholiuk.organs.Anopheles;
+import com.cursach.dmytropakholiuk.organs.Liver;
+import com.cursach.dmytropakholiuk.organs.Marrow;
+import com.cursach.dmytropakholiuk.organs.Organ;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -23,16 +26,29 @@ public class Application extends javafx.application.Application {
     public static JSONExporter jsonExporter = JSONExporter.getInstance();
     static AnimationTimer timer ;
     static Scene scene;
+    static Stage stage;
     static BorderPane layout;
     public static ScrollPane scrollPane;
     public static Group group = new Group();
     public static Group cellGroup = new Group();
+    public static Group organGroup = new Group();
 //    public static Cell[] cells = new Cell[0];
     public static List<Cell> cells = new ArrayList<>();
+
+    public static Anopheles anopheles;
+    public static Liver liver;
+    public static Marrow marrow;
+    public static Organ.NullOrgan nullOrgan = new Organ.NullOrgan();
     public static void truncateCells(){
         for (int i = cells.toArray().length - 1; i >= 0; i--){
             cells.get(i).delete();
         }
+//        for (int i = anopheles.tenants.toArray().length - 1; i >= 0; i--){
+//            anopheles.tenants.get(i).delete();
+//        }
+    }
+    public static void refreshScreen(){
+        stage.setHeight(stage.getHeight() + 0.0001);
     }
     public static AnimationTimer strategyTimer = new AnimationTimer() {
         @Override
@@ -55,8 +71,18 @@ public class Application extends javafx.application.Application {
 //        scrollPane.setFitToWidth(true);
 //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
+        Application.stage = stage;
+
+        group.getChildren().add(organGroup);
         group.getChildren().add(cellGroup);
+
+
+        Application.anopheles = new Anopheles(300, 300);
+        Application.liver = new Liver(0,0);
+        Application.marrow = new Marrow(0,450);
         Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
+
+
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
@@ -126,6 +152,14 @@ public class Application extends javafx.application.Application {
             }
             if (event.getCode().equals(KeyCode.L)){
                 CellList cellList = new CellList();
+            }
+            if (event.getCode().equals(KeyCode.E)){
+                for (Cell cell: cells){
+                    if (cell.isActive()){
+                        cell.enterOrgan();
+                        //todo
+                    }
+                }
             }
             if (event.getCode().equals(KeyCode.F6)){
                 jsonExporter.quickSave();

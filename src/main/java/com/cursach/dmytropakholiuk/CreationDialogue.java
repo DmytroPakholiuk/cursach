@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk;
 import com.cursach.dmytropakholiuk.cells.*;
+import com.cursach.dmytropakholiuk.organs.OrganType;
 import com.cursach.dmytropakholiuk.strategy.Strategy;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -105,7 +106,7 @@ public class CreationDialogue {
                                     stage = new SporozoitPStage(); break;
                             }
 
-                            InactivePlasmodium plasmodium = new InactivePlasmodium(name, _active, x, y, 30);
+                            InactivePlasmodium plasmodium = new InactivePlasmodium(name, _active, x, y, 30, OrganType.ORGANTYPE_NULLORGAN);
                             plasmodium.bindStage(stage);
                             break;
                         case "Plasmodium vivax":
