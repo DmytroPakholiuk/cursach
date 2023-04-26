@@ -15,6 +15,7 @@ module com.example.demo1 {
     opens com.cursach.dmytropakholiuk to javafx.fxml;
     exports com.cursach.dmytropakholiuk;
     exports com.cursach.dmytropakholiuk.export;
+    exports com.cursach.dmytropakholiuk.organs;
     opens com.cursach.dmytropakholiuk.export to javafx.fxml;
     exports com.cursach.dmytropakholiuk.cells;
     opens com.cursach.dmytropakholiuk.cells to javafx.fxml;

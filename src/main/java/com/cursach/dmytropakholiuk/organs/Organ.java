@@ -19,6 +19,47 @@ import java.util.List;
  */
 public abstract class Organ {
 
+    public static OrganType getOrganType(Organ organ){
+        if (organ instanceof NullOrgan){
+            return OrganType.ORGANTYPE_NULLORGAN;
+        }
+        if (organ instanceof Marrow){
+            return OrganType.ORGANTYPE_MARROW;
+        }
+        if (organ instanceof Anopheles){
+            return OrganType.ORGANTYPE_ANOPHELES;
+        }
+        if (organ instanceof Liver){
+            return OrganType.ORGANTYPE_LIVER;
+        }
+        throw new RuntimeException("unsupported organ type");
+    }
+    public static void bindByOrganType(Cell cell, OrganType organType){
+        switch (organType){
+            case ORGANTYPE_NULLORGAN:
+                Application.nullOrgan.acceptCell(cell); break;
+            case ORGANTYPE_ANOPHELES:
+                Application.anopheles.moveInside(cell); break;
+            case ORGANTYPE_MARROW:
+                Application.marrow.acceptCell(cell); break;
+            case ORGANTYPE_LIVER:
+                Application.liver.acceptCell(cell); break;
+        }
+    }
+    public static Organ getOrganByType(OrganType organType){
+        switch (organType){
+            case ORGANTYPE_NULLORGAN:
+                return Application.nullOrgan;
+            case ORGANTYPE_ANOPHELES:
+                return Application.anopheles;
+            case ORGANTYPE_MARROW:
+                return Application.marrow;
+            case ORGANTYPE_LIVER:
+                return Application.liver;
+        }
+        throw new RuntimeException("Unsupported type of organ");
+    }
+
     /**
      * Null-object nested class. Better than carrying all those NullPointers, eh?
      */
@@ -26,6 +67,19 @@ public abstract class Organ {
         @Override
         public boolean canEnter(Cell cell) {
             return true;
+        }
+        @Override
+        protected void moveInside(Cell cell){
+            if (!this.tenants.contains(cell)){
+                cell.quitOrgan();
+
+//                cell.setActive(false);
+//
+//                Application.cellGroup.getChildren().remove(cell.getGroup());
+//                cell.setVisible(false);
+//
+//                this.tenants.add(cell);
+            }
         }
     }
 

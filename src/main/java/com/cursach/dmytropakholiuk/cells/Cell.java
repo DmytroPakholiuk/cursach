@@ -3,6 +3,7 @@ package com.cursach.dmytropakholiuk.cells;
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.export.*;
 import com.cursach.dmytropakholiuk.organs.Organ;
+import com.cursach.dmytropakholiuk.organs.OrganType;
 import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
@@ -140,21 +141,39 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
      */
     @JsonIgnore
     public Organ organ = Application.nullOrgan;
+    protected OrganType organType = OrganType.ORGANTYPE_NULLORGAN;
+    public void setOrganType(OrganType organType){
+        this.organType = organType;
+        this.enterOrgan(Organ.getOrganByType(organType));
+    }
+    public OrganType getOrganType() {
+        return organType;
+    }
+
     public void enterOrgan(){
         Organ organ1 = Application.nullOrgan;
         if (this.group.getBoundsInParent().intersects(Application.anopheles.getGroup().getBoundsInParent())){
             organ1 = Application.anopheles;
         }
 //        System.out.println(this.toString() + " ENTERED ORGAN " + organ1.toString());
-        Application.anopheles.acceptCell(this);
+        organ1.acceptCell(this);
         Application.refreshScreen();
         this.organ = organ1;
+        this.organType = Organ.getOrganType(this.organ);
+    }
+    public void enterOrgan(Organ organ1) {
+        organ1.acceptCell(this);
+        Application.refreshScreen();
+        this.organ = organ1;
+        this.organType = Organ.getOrganType(this.organ);
     }
     public void quitOrgan(){
         if (!(this.organ instanceof Organ.NullOrgan)){
+            this.setVisible(true);
             organ.moveOutside(this);
             Application.refreshScreen();
             this.organ = Application.nullOrgan;
+            this.organType = Organ.getOrganType(this.organ);
         }
     }
 
@@ -209,11 +228,13 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         String _y = Double.toString(getY());
         String _active = active ? "active" : "inactive";
 
-        return "Cell "+this.name+", x="+_x+", y="+_y+", "+_active;
+        return "Cell "+this.name+", INSIDE "+this.organType+", x="+_x+", y="+_y+", "+_active;
     }
 
     public void delete(){
         Application.strategyTimer.stop();
+
+        this.quitOrgan();
 
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);

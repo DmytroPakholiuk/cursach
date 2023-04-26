@@ -68,6 +68,7 @@ public class CellList {
                     cellBox.relatedCell.quitOrgan();
                 }
             }
+            System.out.println(Application.anopheles.tenants);
 
             window.close();
         });

@@ -43,6 +43,9 @@ public class Application extends javafx.application.Application {
         for (int i = cells.toArray().length - 1; i >= 0; i--){
             cells.get(i).delete();
         }
+//        for (int i = anopheles.tenants.toArray().length - 1; i >= 0; i--){
+//            anopheles.tenants.get(i).delete();
+//        }
     }
     public static void refreshScreen(){
         stage.setHeight(stage.getHeight() + 0.0001);
