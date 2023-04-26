@@ -21,13 +21,16 @@ public class CellList {
     public List<CellBox> selectCells = new ArrayList<>();
 
     public CellList(){
+        this(Application.cells);
+    }
+    public CellList(List<Cell> cellList){
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Cell list");
 
         VBox layout = new VBox(10);
 
-        for (Cell cell: cells){
+        for (Cell cell: cellList){
             CellBox select = new CellBox(cell.getPrettyString(), cell);
             this.selectCells.add(select);
             layout.getChildren().add(select);

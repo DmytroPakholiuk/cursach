@@ -20,6 +20,8 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Application extends javafx.application.Application {
@@ -80,8 +82,11 @@ public class Application extends javafx.application.Application {
         Application.anopheles = new Anopheles(300, 300);
         Application.liver = new Liver(0,0);
         Application.marrow = new Marrow(0,450);
-        Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
+        Cell example =  new WhiteBloodCell("example", false, 300, 400, 30, 7.5);
+        Cell example1 =  new WhiteBloodCell("example1", false, 400, 400, 30, 7.5);
 
+        cells.sort(Cell.coordinateComparator);
+        System.out.println(cells);
 
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
@@ -152,6 +157,9 @@ public class Application extends javafx.application.Application {
             }
             if (event.getCode().equals(KeyCode.L)){
                 CellList cellList = new CellList();
+            }
+            if (event.getCode().equals(KeyCode.J)){
+                CellFilter filter = new CellFilter();
             }
             if (event.getCode().equals(KeyCode.E)){
                 for (Cell cell: cells){

@@ -16,10 +16,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
-public abstract class Cell implements Exportable, StrategyManageable, Deployable, Cloneable {
+public abstract class Cell implements Exportable, StrategyManageable, Deployable, Cloneable, Comparable<Cell> {
     static int newx;
     static int newy;
     public static CellType getType(Deployable cell){
@@ -258,6 +259,36 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
 
         return cloned;
     }
+
+    public static Comparator<Cell> coordinateComparator
+            = new Comparator<Cell>() {
+        @Override
+        public int compare(Cell c1, Cell c2) {
+            if (c1.getX() + c1.getY() < c2.getY() + c2.getX()) return -1;
+            if (c1.getX() + c1.getY() > c2.getY() + c2.getX()) return 1;
+            return 0;
+        }
+    };
+    public static Comparator<Cell> nameComparator
+            = new Comparator<Cell>() {
+        @Override
+        public int compare(Cell e1, Cell e2) {
+            return e1.name.compareTo(e2.name);
+        }
+    };
+    public static Comparator<Cell> organComparator
+            = new Comparator<Cell>() {
+        @Override
+        public int compare(Cell e1, Cell e2) {
+            return e1.organType.compareTo(e2.organType);
+        }
+    };
+
+    public int compareTo(Cell cell){
+        return this.name.compareTo(cell.name);
+    }
+
+
     protected void configureClone(Cell cloned){
         cloned.shownName = new Text(cloned.name);
 
