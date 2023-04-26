@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -232,6 +233,15 @@ public class CellFilter {
         );
         organ.setPromptText("Select Organ: ");
 
+        Label sortLabel = new Label("Sort by: ");
+        ToggleGroup sort = new ToggleGroup();
+        RadioButton sortName = new RadioButton("Name");
+        RadioButton sortCoordinate = new RadioButton("Coordinates");
+        RadioButton sortOrgan = new RadioButton("Organ");
+        sortName.setToggleGroup(sort);
+        sortCoordinate.setToggleGroup(sort);
+        sortOrgan.setToggleGroup(sort);
+
 
         Button submit = new Button("Submit");
 
@@ -268,6 +278,17 @@ public class CellFilter {
                         organ1
                 );
                 filter(request1);
+
+                if (sortName.isSelected()){
+                    result.sort(Cell.nameComparator);
+                }
+                if (sortCoordinate.isSelected()){
+                    result.sort(Cell.coordinateComparator);
+                }
+                if (sortOrgan.isSelected()){
+                    result.sort(Cell.organComparator);
+                }
+
                 new CellList(result);
 
 
@@ -287,9 +308,10 @@ public class CellFilter {
                 labelDigest, textFieldDigest,
                 labelPstage, pStage,
                 labelOrgan, organ,
+                sortLabel, sortName, sortCoordinate, sortOrgan,
                 submit
         );
-        Scene scene = new Scene(layout, 400, 600);
+        Scene scene = new Scene(layout, 400, 800);
         window.setScene(scene);
         window.showAndWait();
     }
