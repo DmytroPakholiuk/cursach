@@ -78,6 +78,8 @@ public class Application extends javafx.application.Application {
 
 
         Application.anopheles = new Anopheles(300, 300);
+        Application.liver = new Liver(0,0);
+        Application.marrow = new Marrow(0,450);
         Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
 
 

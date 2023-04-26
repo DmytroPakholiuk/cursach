@@ -155,6 +155,12 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         if (this.group.getBoundsInParent().intersects(Application.anopheles.getGroup().getBoundsInParent())){
             organ1 = Application.anopheles;
         }
+        if (this.group.getBoundsInParent().intersects(Application.liver.getGroup().getBoundsInParent())){
+            organ1 = Application.liver;
+        }
+        if (this.group.getBoundsInParent().intersects(Application.marrow.getGroup().getBoundsInParent())){
+            organ1 = Application.marrow;
+        }
 //        System.out.println(this.toString() + " ENTERED ORGAN " + organ1.toString());
         organ1.acceptCell(this);
         Application.refreshScreen();

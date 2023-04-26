@@ -34,18 +34,18 @@ public abstract class Organ {
         }
         throw new RuntimeException("unsupported organ type");
     }
-    public static void bindByOrganType(Cell cell, OrganType organType){
-        switch (organType){
-            case ORGANTYPE_NULLORGAN:
-                Application.nullOrgan.acceptCell(cell); break;
-            case ORGANTYPE_ANOPHELES:
-                Application.anopheles.moveInside(cell); break;
-            case ORGANTYPE_MARROW:
-                Application.marrow.acceptCell(cell); break;
-            case ORGANTYPE_LIVER:
-                Application.liver.acceptCell(cell); break;
-        }
-    }
+//    public static void bindByOrganType(Cell cell, OrganType organType){
+//        switch (organType){
+//            case ORGANTYPE_NULLORGAN:
+//                Application.nullOrgan.acceptCell(cell); break;
+//            case ORGANTYPE_ANOPHELES:
+//                Application.anopheles.moveInside(cell); break;
+//            case ORGANTYPE_MARROW:
+//                Application.marrow.acceptCell(cell); break;
+//            case ORGANTYPE_LIVER:
+//                Application.liver.acceptCell(cell); break;
+//        }
+//    }
     public static Organ getOrganByType(OrganType organType){
         switch (organType){
             case ORGANTYPE_NULLORGAN:
