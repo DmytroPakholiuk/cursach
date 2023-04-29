@@ -222,6 +222,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             @Override
             public void handle(MouseEvent event) {
                 setActive(!active);
+                Application.logger.log("User selected cell in X = " + event.getX() + " Y = " + event.getY());
             }
         });
     }

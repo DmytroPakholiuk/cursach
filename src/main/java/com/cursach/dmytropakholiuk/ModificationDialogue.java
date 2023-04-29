@@ -111,6 +111,8 @@ public class ModificationDialogue {
                     ((InactivePlasmodium)cell).bindStage(stage);
                 }
 
+                Application.logger.log("...to " + cell);
+
                 window.close();
             }
         });

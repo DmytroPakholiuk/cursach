@@ -7,8 +7,10 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -36,6 +38,10 @@ public class CellList {
             layout.getChildren().add(select);
         }
 
+        Label countLabel = new Label(cellList.toArray().length +" cells that match the request were found");
+        countLabel.setFont(new Font(20));
+
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.fitToWidthProperty().set(true);
         scrollPane.setContent(layout);
@@ -47,6 +53,7 @@ public class CellList {
             @Override
             public void handle(ActionEvent event) {
                 for (CellBox cellBox: selectCells){
+                    Application.logger.log("User selected " + cellBox.relatedCell);
                     cellBox.relatedCell.setActive(cellBox.isSelected());
                 }
 
@@ -58,6 +65,7 @@ public class CellList {
             public void handle(ActionEvent event) {
                 for (CellBox cellBox: selectCells){
                     if (cellBox.isSelected()){
+                        Application.logger.log("User deleted " + cellBox.relatedCell);
                         cellBox.relatedCell.delete();
                     }
                 }
@@ -68,6 +76,7 @@ public class CellList {
         extract.setOnAction(actionEvent -> {
             for (CellBox cellBox: selectCells){
                 if (cellBox.isSelected()){
+                    Application.logger.log("User extracted " + cellBox.relatedCell);
                     cellBox.relatedCell.quitOrgan();
                 }
             }
@@ -77,11 +86,12 @@ public class CellList {
         });
 
         layout.getChildren().addAll(
+                countLabel,
                 submit,
                 delete,
                 extract
         );
-        Scene scene = new Scene(layout, 400, 350);
+        Scene scene = new Scene(layout, 700, 600);
         window.setScene(scene);
         window.showAndWait();
 
