@@ -15,31 +15,92 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CellFilter {
 
     public List<Cell> result = new ArrayList<>(Application.cells);
 
     public void filter(Request request){
-        for (int i = result.toArray().length - 1; i >= 0; i--){
-            Cell checked = result.get(i);
+//        for (int i = result.toArray().length - 1; i >= 0; i--){
+//            Cell checked = result.get(i);
+//
+//            if (!(request.name.equals(""))){
+//                if (!(request.name.equals(checked.getName()))){
+//                    result.remove(i); continue;
+//                }
+//            }
+//
+//            if (!(request.x == -1)){
+//                if (!(request.x == checked.getX())){
+//                    result.remove(i); continue;
+//                }
+//            }
+//
+//            if (!(request.y == -1)){
+//                if (!(request.y == checked.getY())){
+//                    result.remove(i); continue;
+//                }
+//            }
+//
+////            try {
+////                if (!(request.pstage == null)){
+////                    if (!(request.pstage.equals(PStage.getPStageType(((InactivePlasmodium)checked).getStage())))){
+////                        result.remove(i); continue;
+////                    }
+////                }
+////            } catch (Exception e) {
+////                result.remove(i); continue;
+////            }
+//            System.out.println(request.pstage);
+//            if (!(request.pstage == null)){
+//                if (checked instanceof InactivePlasmodium){
+//                    if (!(request.pstage.equals(PStage.getPStageType(((InactivePlasmodium)checked).getStage())))){
+//                        result.remove(i); continue;
+//                    }
+//                } else {
+//                    result.remove(i); continue;
+//                }
+//
+//            }
+//
+//            if (!(request.organType == null)){
+//                if (!(request.organType.equals(checked.getOrganType()))){
+//                    result.remove(i); continue;
+//                }
+//            }
+//
+//            if (!(request.digest == -1)){
+//                if (checked instanceof WhiteBloodCell){
+//                    if (!(request.digest == ((WhiteBloodCell)checked).getDigestTime())){
+//                        result.remove(i); continue;
+//                    }
+//                } else {
+//                    result.remove(i); continue;
+//                }
+//            }
+//
+//            if (!(request.cellType == null)){
+//                if (!(request.cellType.equals(Cell.getType(checked)))){
+//                    result.remove(i); continue;
+//                }
+//            }
+//
+//        }
 
-            if (!(request.name.equals(""))){
-                if (!(request.name.equals(checked.getName()))){
-                    result.remove(i); continue;
-                }
+        Stream<Cell> cellStream = result.stream();
+
+        if (!(request.name.equals(""))){
+                cellStream = cellStream.filter(cell -> cell.getName().equals(request.name));
             }
 
             if (!(request.x == -1)){
-                if (!(request.x == checked.getX())){
-                    result.remove(i); continue;
-                }
+                cellStream = cellStream.filter(cell -> cell.getX() == request.x);
             }
 
             if (!(request.y == -1)){
-                if (!(request.y == checked.getY())){
-                    result.remove(i); continue;
-                }
+                cellStream = cellStream.filter(cell -> cell.getY() == request.y);
             }
 
 //            try {
@@ -51,41 +112,37 @@ public class CellFilter {
 //            } catch (Exception e) {
 //                result.remove(i); continue;
 //            }
-            System.out.println(request.pstage);
+//            System.out.println(request.pstage);
             if (!(request.pstage == null)){
-                if (checked instanceof InactivePlasmodium){
-                    if (!(request.pstage.equals(PStage.getPStageType(((InactivePlasmodium)checked).getStage())))){
-                        result.remove(i); continue;
+                cellStream = cellStream.filter(cell -> {
+                    if (!(cell instanceof InactivePlasmodium)){
+                        return false;
                     }
-                } else {
-                    result.remove(i); continue;
-                }
+                    return PStage.getPStageType(((InactivePlasmodium)cell).getStage()).equals(request.pstage);
+
+                });
 
             }
 
             if (!(request.organType == null)){
-                if (!(request.organType.equals(checked.getOrganType()))){
-                    result.remove(i); continue;
-                }
+                cellStream = cellStream.filter(cell -> cell.getOrganType().equals(request.organType));
             }
 
             if (!(request.digest == -1)){
-                if (checked instanceof WhiteBloodCell){
-                    if (!(request.digest == ((WhiteBloodCell)checked).getDigestTime())){
-                        result.remove(i); continue;
+                cellStream = cellStream.filter(cell -> {
+                    if (!(cell instanceof WhiteBloodCell)){
+                        return false;
                     }
-                } else {
-                    result.remove(i); continue;
-                }
+                    return ((WhiteBloodCell)cell).getDigestTime() == request.digest;
+                });
             }
 
             if (!(request.cellType == null)){
-                if (!(request.cellType.equals(Cell.getType(checked)))){
-                    result.remove(i); continue;
-                }
+                cellStream = cellStream.filter(cell -> Cell.getType(cell).equals(request.cellType));
             }
 
-        }
+            result = cellStream.collect(Collectors.toList());
+
     }
 
     public static class Request{
@@ -304,7 +361,7 @@ public class CellFilter {
                 labelX, textFieldX,
                 labelY, textFieldY,
                 cellType,
-                active,
+//                active,
                 labelDigest, textFieldDigest,
                 labelPstage, pStage,
                 labelOrgan, organ,

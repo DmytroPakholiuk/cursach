@@ -32,11 +32,17 @@ public class CellList {
 
         VBox layout = new VBox(10);
 
-        for (Cell cell: cellList){
+//        for (Cell cell: cellList){
+//            CellBox select = new CellBox(cell.getPrettyString(), cell);
+//            this.selectCells.add(select);
+//            layout.getChildren().add(select);
+//        }
+
+        cellList.stream().forEach(cell -> {
             CellBox select = new CellBox(cell.getPrettyString(), cell);
             this.selectCells.add(select);
             layout.getChildren().add(select);
-        }
+        });
 
         Label countLabel = new Label(cellList.toArray().length +" cells that match the request were found");
         countLabel.setFont(new Font(20));
