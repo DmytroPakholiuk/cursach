@@ -11,6 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
+/**
+ * Renders a form of cell params and creates a cell with those params
+ *
+ * // Реалізовано в 2ЛР
+ */
 public class CreationDialogue {
     public CreationDialogue(){
         Stage window = new Stage();

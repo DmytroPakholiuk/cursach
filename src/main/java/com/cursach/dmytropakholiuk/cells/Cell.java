@@ -23,6 +23,7 @@ import java.util.List;
 public abstract class Cell implements Exportable, StrategyManageable, Deployable, Cloneable, Comparable<Cell> {
     static int newx;
     static int newy;
+    protected static int cellQnt = 0;
     public static CellType getType(Deployable cell){
 
         if (cell instanceof RedBloodCell){
@@ -55,6 +56,22 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.y = _y;
         this.group.setLayoutY(_y);
     }
+
+    /**
+     * a unique id to affect the hashcode of the object
+     */
+    protected int id;
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id){
+        if (cellQnt < id){
+            cellQnt = id;
+            this.id = id;
+        }
+    }
+
     protected double speed = 1;
 
     public double getSpeed() {
@@ -113,6 +130,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
 
     protected boolean active = false;
     public void setActive(boolean a) {
+        if (!this.isVisible()){
+            return;
+        }
         this.active = a;
         if (this.active)
             this.r.setFill(Color.RED);
@@ -142,6 +162,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
      */
     @JsonIgnore
     public Organ organ = Application.nullOrgan;
+    /**
+     * Checking organType is easier than checking type manually. Also helps to export/import objects correctly
+     */
     protected OrganType organType = OrganType.ORGANTYPE_NULLORGAN;
     public void setOrganType(OrganType organType){
         this.organType = organType;
@@ -239,6 +262,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         return "Cell "+this.name+", INSIDE "+this.organType+", x="+_x+", y="+_y+", "+_active;
     }
 
+    /**
+     * removes all possible links to this object and makes its group invisible
+     */
     public void delete(){
         Application.strategyTimer.stop();
 
@@ -250,12 +276,14 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.unbindExporter();
 //        this.strategy.unbindManageable();
         this.setStrategy(null);
+        Application.refreshScreen();
 
         Application.strategyTimer.start();
 
     }
     public Cell clone() throws CloneNotSupportedException{
         Cell cloned = (Cell)super.clone();
+        this.setId(cellQnt + 1);
         cloned.setDefaultStrategy();
 
         return cloned;

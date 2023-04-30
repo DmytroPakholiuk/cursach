@@ -46,9 +46,6 @@ public class Application extends javafx.application.Application {
         for (int i = cells.toArray().length - 1; i >= 0; i--){
             cells.get(i).delete();
         }
-//        for (int i = anopheles.tenants.toArray().length - 1; i >= 0; i--){
-//            anopheles.tenants.get(i).delete();
-//        }
     }
     public static void refreshScreen(){
         stage.setHeight(stage.getHeight() + 0.0001);
@@ -89,11 +86,6 @@ public class Application extends javafx.application.Application {
         cells.sort(Cell.coordinateComparator);
         System.out.println(cells);
 
-//        logger.log("asdasdsadasd");
-//        logger.log("asdasdsadasd");
-//        logger.log("asdasdsadasd");
-//        logger.log("asdasdsadasd");
-
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
@@ -106,6 +98,20 @@ public class Application extends javafx.application.Application {
         launch();
     }
 
+    /**
+     * This class handles key inputs
+     * - N or INSERT - create new cell
+     * - DELETE - delete selected cell
+     * - ESCAPE - unselect all cells
+     * - M - modify 1 selected cell
+     * - K - clone 1 selected cell
+     * - J - find cells
+     * - L - all cells
+     * - E - try to enter organs with selected cells
+     * - CTRL+A - select all cells
+     * - F6 - quicksave
+     * - F7 - quickload
+     */
     private class KeyPressedHandler implements EventHandler<KeyEvent> {
         public void handle(KeyEvent event) {
 

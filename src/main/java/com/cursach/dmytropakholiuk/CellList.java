@@ -17,6 +17,11 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays a list of cells that it receives. Each cell can be selected with its checkbox
+ *
+ * //Незначні зміни з 2 ЛР
+ */
 public class CellList {
 
     public List<Cell> cells = Application.cells;

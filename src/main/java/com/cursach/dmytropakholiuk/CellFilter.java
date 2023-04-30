@@ -18,10 +18,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
+/**
+ * This class is used to display cell filter form, process request and pass it on to CellList
+ */
 public class CellFilter {
 
     public List<Cell> result = new ArrayList<>(Application.cells);
 
+    /**
+     * Applies filters to the result. Commented code simply iterates through the collection, removing elements that don't match.
+     * Uncommented code does the same but via streams
+     * @param request
+     */
     public void filter(Request request){
 //        for (int i = result.toArray().length - 1; i >= 0; i--){
 //            Cell checked = result.get(i);
@@ -145,6 +154,9 @@ public class CellFilter {
 
     }
 
+    /**
+     * It simply gets the strings you can get from form and parses them into a nicer, more usable object
+     */
     public static class Request{
         public int x;
         public int y;
@@ -225,6 +237,9 @@ public class CellFilter {
     }
     public Request request;
 
+    /**
+     * Constructor displays form and passes the data to filter, parser and CellList
+     */
     public CellFilter(){
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
