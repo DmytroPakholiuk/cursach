@@ -13,6 +13,11 @@ import javafx.scene.layout.VBox;
 
 import java.nio.file.Watchable;
 
+/**
+ * Creates a form of cell params and changes a cell accordingly
+ *
+ * //Реалізовано в 2 ЛР
+ */
 public class ModificationDialogue {
 
     public com.cursach.dmytropakholiuk.cells.Cell modifiedCell;
@@ -110,6 +115,8 @@ public class ModificationDialogue {
 
                     ((InactivePlasmodium)cell).bindStage(stage);
                 }
+
+                Application.logger.log("...to " + cell);
 
                 window.close();
             }

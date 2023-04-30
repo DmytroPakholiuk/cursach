@@ -1,5 +1,6 @@
 package com.cursach.dmytropakholiuk;
 import com.cursach.dmytropakholiuk.cells.*;
+import com.cursach.dmytropakholiuk.cells.Cell;
 import com.cursach.dmytropakholiuk.organs.OrganType;
 import com.cursach.dmytropakholiuk.strategy.Strategy;
 import javafx.stage.Modality;
@@ -10,6 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
+/**
+ * Renders a form of cell params and creates a cell with those params
+ *
+ * // Реалізовано в 2ЛР
+ */
 public class CreationDialogue {
     public CreationDialogue(){
         Stage window = new Stage();
@@ -80,6 +87,8 @@ public class CreationDialogue {
                 }catch (Exception e){
                 }
 
+                Cell cell = null;
+
                 boolean _active = active.isSelected();
                 try {
                     switch (cellType.getValue().toString()){
@@ -90,10 +99,10 @@ public class CreationDialogue {
                             }catch (Exception e){
                             }
 
-                            WhiteBloodCell whiteBloodCell = new WhiteBloodCell(name, _active, x, y, 30, digestTime);
+                            cell = new WhiteBloodCell(name, _active, x, y, 30, digestTime);
                             break;
                         case "Red blood cell":
-                            RedBloodCell redBloodCell = new RedBloodCell(name, _active, x, y, 30);
+                            cell = new RedBloodCell(name, _active, x, y, 30);
                             break;
                         case "Inactive plasmodium":
                             PStage stage = null;
@@ -106,8 +115,8 @@ public class CreationDialogue {
                                     stage = new SporozoitPStage(); break;
                             }
 
-                            InactivePlasmodium plasmodium = new InactivePlasmodium(name, _active, x, y, 30, OrganType.ORGANTYPE_NULLORGAN);
-                            plasmodium.bindStage(stage);
+                            cell = new InactivePlasmodium(name, _active, x, y, 30, OrganType.ORGANTYPE_NULLORGAN);
+                            ((InactivePlasmodium)cell).bindStage(stage);
                             break;
                         case "Plasmodium vivax":
                             CellFactory.createCell(CellFactory.CELLTYPE_PLASVIVAX);break;
@@ -118,6 +127,7 @@ public class CreationDialogue {
                     e.printStackTrace();
                     System.out.println("could not create a cell");
                 }
+                Application.logger.log("User created a cell " + cell.toString());
                 window.close();
             }
         });

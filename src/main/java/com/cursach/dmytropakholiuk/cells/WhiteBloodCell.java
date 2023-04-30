@@ -52,6 +52,7 @@ public class WhiteBloodCell extends Cell {
         this.setY(_y);
         this.setName(_name);
         this.setActive(_active);
+        this.setId(cellQnt + 1);
 
         this.setStep(_step);
         this.setDigestTime(_digestTime);

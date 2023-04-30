@@ -56,6 +56,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         this.setY(_y);
         this.setName(_name);
         this.setActive(_active);
+        this.setId(cellQnt + 1);
 
         this.setStep(_step);
 

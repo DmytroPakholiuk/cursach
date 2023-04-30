@@ -20,6 +20,8 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Application extends javafx.application.Application {
@@ -34,6 +36,7 @@ public class Application extends javafx.application.Application {
     public static Group organGroup = new Group();
 //    public static Cell[] cells = new Cell[0];
     public static List<Cell> cells = new ArrayList<>();
+    public static Logger logger = Logger.getInstance();
 
     public static Anopheles anopheles;
     public static Liver liver;
@@ -43,9 +46,6 @@ public class Application extends javafx.application.Application {
         for (int i = cells.toArray().length - 1; i >= 0; i--){
             cells.get(i).delete();
         }
-//        for (int i = anopheles.tenants.toArray().length - 1; i >= 0; i--){
-//            anopheles.tenants.get(i).delete();
-//        }
     }
     public static void refreshScreen(){
         stage.setHeight(stage.getHeight() + 0.0001);
@@ -80,8 +80,11 @@ public class Application extends javafx.application.Application {
         Application.anopheles = new Anopheles(300, 300);
         Application.liver = new Liver(0,0);
         Application.marrow = new Marrow(0,450);
-        Cell example =  new WhiteBloodCell("example", false, 400, 400, 30, 7.5);
+        Cell example =  new WhiteBloodCell("example", false, 300, 400, 30, 7.5);
+        Cell example1 =  new WhiteBloodCell("example1", false, 400, 400, 30, 7.5);
 
+        cells.sort(Cell.coordinateComparator);
+        System.out.println(cells);
 
         scene = new Scene(group, 600,700);
         scene.setOnKeyPressed(new KeyPressedHandler());
@@ -95,6 +98,20 @@ public class Application extends javafx.application.Application {
         launch();
     }
 
+    /**
+     * This class handles key inputs
+     * - N or INSERT - create new cell
+     * - DELETE - delete selected cell
+     * - ESCAPE - unselect all cells
+     * - M - modify 1 selected cell
+     * - K - clone 1 selected cell
+     * - J - find cells
+     * - L - all cells
+     * - E - try to enter organs with selected cells
+     * - CTRL+A - select all cells
+     * - F6 - quicksave
+     * - F7 - quickload
+     */
     private class KeyPressedHandler implements EventHandler<KeyEvent> {
         public void handle(KeyEvent event) {
 
@@ -105,15 +122,18 @@ public class Application extends javafx.application.Application {
             if (event.getCode().equals(KeyCode.DELETE)){
                 for (int i = cells.toArray().length - 1; i >= 0; i--){
                     if (cells.get(i).isActive()){
+                        logger.log("USER KILLED CELL " + cells.get(i) + ". YOU BASTARD!");
                         cells.get(i).delete();
                     }
                 }
+
             }
 
             if (event.getCode().equals(KeyCode.ESCAPE)) {
                 for (Cell cell: cells){
                     cell.setActive(false);
                 }
+                logger.log("User unselected all cells");
             }
             if (event.getCode().equals(KeyCode.M)){
                 int count = 0;
@@ -125,6 +145,7 @@ public class Application extends javafx.application.Application {
                     }
                 }
                 if (count == 1){
+                    logger.log("User tried to modify cell " + selected.toString() + " ...");
                     ModificationDialogue dialogue = new ModificationDialogue(selected);
                 } else {
 
@@ -143,6 +164,7 @@ public class Application extends javafx.application.Application {
 //                    ModificationDialogue dialogue = new ModificationDialogue(selected, true);
                     try {
                         selected.clone();
+                        logger.log("User cloned cell " + selected.toString());
                     } catch (CloneNotSupportedException e) {
                         throw new RuntimeException(e);
                     }
@@ -151,7 +173,12 @@ public class Application extends javafx.application.Application {
                 }
             }
             if (event.getCode().equals(KeyCode.L)){
+                logger.log("User requested full cell list");
                 CellList cellList = new CellList();
+            }
+            if (event.getCode().equals(KeyCode.J)){
+                logger.log("User requested specific cell list");
+                CellFilter filter = new CellFilter();
             }
             if (event.getCode().equals(KeyCode.E)){
                 for (Cell cell: cells){
@@ -160,9 +187,17 @@ public class Application extends javafx.application.Application {
                         //todo
                     }
                 }
+                logger.log("User tried to enter organs with cells");
+            }
+            if (event.getCode().equals(KeyCode.A)){
+                if (event.isControlDown()){
+                    cells.forEach(Cell::switchActivation);
+                }
+                logger.log("User selected all cells");
             }
             if (event.getCode().equals(KeyCode.F6)){
                 jsonExporter.quickSave();
+                logger.log("User quicksaved");
             }
             if (event.getCode().equals(KeyCode.F7)){
                 Application.strategyTimer.stop();
@@ -172,6 +207,7 @@ public class Application extends javafx.application.Application {
                 }
 
                 Application.strategyTimer.start();
+                logger.log("User quickloaded");
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {
@@ -179,6 +215,7 @@ public class Application extends javafx.application.Application {
                         cell.moveUp();
                     }
                 }
+                logger.log("User moved selected cells UP");
             }
             if (event.getCode().equals(KeyCode.DOWN)) {
                 for (Cell cell : cells) {
@@ -186,6 +223,7 @@ public class Application extends javafx.application.Application {
                         cell.moveDown();
                     }
                 }
+                logger.log("User moved selected cells DOWN");
             }
             if (event.getCode().equals(KeyCode.LEFT)) {
                 for (Cell cell : cells) {
@@ -193,6 +231,8 @@ public class Application extends javafx.application.Application {
                         cell.moveLeft();
                     }
                 }
+                logger.log("User moved selected cells LEFT");
+
             }
             if (event.getCode().equals(KeyCode.RIGHT)) {
                 for (Cell cell : cells) {
@@ -200,6 +240,8 @@ public class Application extends javafx.application.Application {
                         cell.moveRight();
                     }
                 }
+                logger.log("User moved selected cells RIGHT");
+
             }
         }
 

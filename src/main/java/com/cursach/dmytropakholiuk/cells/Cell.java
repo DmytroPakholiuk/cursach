@@ -16,12 +16,14 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
-public abstract class Cell implements Exportable, StrategyManageable, Deployable, Cloneable {
+public abstract class Cell implements Exportable, StrategyManageable, Deployable, Cloneable, Comparable<Cell> {
     static int newx;
     static int newy;
+    protected static int cellQnt = 0;
     public static CellType getType(Deployable cell){
 
         if (cell instanceof RedBloodCell){
@@ -54,6 +56,22 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.y = _y;
         this.group.setLayoutY(_y);
     }
+
+    /**
+     * a unique id to affect the hashcode of the object
+     */
+    protected int id;
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id){
+        if (cellQnt < id){
+            cellQnt = id;
+            this.id = id;
+        }
+    }
+
     protected double speed = 1;
 
     public double getSpeed() {
@@ -112,6 +130,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
 
     protected boolean active = false;
     public void setActive(boolean a) {
+        if (!this.isVisible()){
+            return;
+        }
         this.active = a;
         if (this.active)
             this.r.setFill(Color.RED);
@@ -141,6 +162,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
      */
     @JsonIgnore
     public Organ organ = Application.nullOrgan;
+    /**
+     * Checking organType is easier than checking type manually. Also helps to export/import objects correctly
+     */
     protected OrganType organType = OrganType.ORGANTYPE_NULLORGAN;
     public void setOrganType(OrganType organType){
         this.organType = organType;
@@ -221,6 +245,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             @Override
             public void handle(MouseEvent event) {
                 setActive(!active);
+                Application.logger.log("User selected cell in X = " + event.getX() + " Y = " + event.getY());
             }
         });
     }
@@ -237,6 +262,9 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         return "Cell "+this.name+", INSIDE "+this.organType+", x="+_x+", y="+_y+", "+_active;
     }
 
+    /**
+     * removes all possible links to this object and makes its group invisible
+     */
     public void delete(){
         Application.strategyTimer.stop();
 
@@ -248,16 +276,48 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.unbindExporter();
 //        this.strategy.unbindManageable();
         this.setStrategy(null);
+        Application.refreshScreen();
 
         Application.strategyTimer.start();
 
     }
     public Cell clone() throws CloneNotSupportedException{
         Cell cloned = (Cell)super.clone();
+        this.setId(cellQnt + 1);
         cloned.setDefaultStrategy();
 
         return cloned;
     }
+
+    public static Comparator<Cell> coordinateComparator
+            = new Comparator<Cell>() {
+        @Override
+        public int compare(Cell c1, Cell c2) {
+            if (c1.getX() + c1.getY() < c2.getY() + c2.getX()) return -1;
+            if (c1.getX() + c1.getY() > c2.getY() + c2.getX()) return 1;
+            return 0;
+        }
+    };
+    public static Comparator<Cell> nameComparator
+            = new Comparator<Cell>() {
+        @Override
+        public int compare(Cell e1, Cell e2) {
+            return e1.name.compareTo(e2.name);
+        }
+    };
+    public static Comparator<Cell> organComparator
+            = new Comparator<Cell>() {
+        @Override
+        public int compare(Cell e1, Cell e2) {
+            return e1.organType.compareTo(e2.organType);
+        }
+    };
+
+    public int compareTo(Cell cell){
+        return this.name.compareTo(cell.name);
+    }
+
+
     protected void configureClone(Cell cloned){
         cloned.shownName = new Text(cloned.name);
 
