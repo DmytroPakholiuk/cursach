@@ -19,6 +19,7 @@ public class EaterStrategy extends MeeleeStrategy{
     public void eat( Deployable target){
         target.delete();
         this.setTarget(null);
+        this.sleep(7, null);
     }
 
     public void execute(){

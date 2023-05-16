@@ -32,6 +32,11 @@ public abstract class ActiveStrategy extends Strategy{
     }
     @Override
     public void execute(){
+        super.execute();
+        if (isSleeping()){
+            return;
+        }
+//        System.out.println(sleepThread.getState());
         approachTarget();
     }
 

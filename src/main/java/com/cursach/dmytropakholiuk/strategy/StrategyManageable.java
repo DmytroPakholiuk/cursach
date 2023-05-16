@@ -9,5 +9,7 @@ public interface StrategyManageable extends Deployable {
 
     public void setStrategy(Strategy strategy);
     public void setDefaultStrategy();
+    public void enterOrgan();
+    public void quitOrgan();
 //    public void move(Strategy.Direction direction);
 }

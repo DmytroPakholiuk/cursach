@@ -46,6 +46,17 @@ public abstract class PStage implements Exportable {
         }
         return stage;
     }
+    public static PStageType nextStage(PStageType stage){
+        switch (stage){
+            case SCHIZONT_PSTAGE:
+                return PStageType.GAMETOCYTE_PSTAGE;
+            case SPOROZOIT_PSTAGE:
+                return PStageType.SCHIZONT_PSTAGE;
+            case GAMETOCYTE_PSTAGE:
+                return PStageType.SPOROZOIT_PSTAGE;
+        }
+        return stage;
+    }
 
     @JsonIgnore
     protected Image image;

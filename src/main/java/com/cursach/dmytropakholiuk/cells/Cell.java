@@ -198,6 +198,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.organType = Organ.getOrganType(this.organ);
     }
     public void quitOrgan(){
+
         if (!(this.organ instanceof Organ.NullOrgan)){
             this.setVisible(true);
             organ.moveOutside(this);
@@ -205,6 +206,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             this.organ = Application.nullOrgan;
             this.organType = Organ.getOrganType(this.organ);
         }
+
     }
 
     /**
@@ -224,7 +226,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         ImageView imageView = new ImageView(getImage());
         imageView.setFitHeight(50);
         imageView.setFitWidth(50);
-        imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(false);
         this.imageView = imageView;
 
         Circle aura = new Circle();

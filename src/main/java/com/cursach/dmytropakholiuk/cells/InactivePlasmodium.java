@@ -141,6 +141,15 @@ public class InactivePlasmodium extends Cell implements Cloneable{
     public void setStage(PStage stage){
         bindStage(stage);
     }
+    public void cycleStage(Runnable callback){
+        this.bindStage(PStage.createPStageByType(PStage.nextStage(PStage.getPStageType(this.getStage()))));
+        if (callback != null){
+            callback.run();
+        }
+    }
+    public void cycleStage(){
+        this.cycleStage(null);
+    }
     public void bindDefaultStage(){
         this.bindStage(new SchizontPStage());
     }

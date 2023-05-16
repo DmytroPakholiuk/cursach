@@ -1,10 +1,8 @@
 package com.cursach.dmytropakholiuk.cells;
 
 import com.cursach.dmytropakholiuk.Application;
-import com.cursach.dmytropakholiuk.strategy.InfestorStrategy;
-import com.cursach.dmytropakholiuk.strategy.RushStrategy;
-import com.cursach.dmytropakholiuk.strategy.Strategy;
-import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
+import com.cursach.dmytropakholiuk.strategy.*;
+import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
@@ -28,7 +26,16 @@ public class GametocytePStage extends PStage{
 
     @Override
     public Strategy defaultStrategy() {
-        return new RushStrategy();
+        Task<Void> callback = new Task<Void>() {
+            @Override
+            protected Void call() {
+                plasmodium.cycleStage();
+                return null;
+            }
+        };
+
+        return new RushStrategy(Application.anopheles, callback);
+//        return new InactiveStrategy();
     }
 
     public GametocytePStage(){
