@@ -53,7 +53,9 @@ public class Application extends javafx.application.Application {
     public static AnimationTimer strategyTimer = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            for (Cell cell: cells){
+//            for (Cell cell: cells){
+            for (int i = cells.toArray().length - 1; i >= 0; i--){
+                Cell cell = cells.get(i);
 //                System.out.println(cell.toString()
 //                        .getStrategy()
 //                );

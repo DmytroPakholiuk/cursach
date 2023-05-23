@@ -8,6 +8,7 @@ import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -272,9 +273,19 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
 
         this.quitOrgan();
 
+        System.out.println(this.group.getChildren());
+
+        for (Node node: this.group.getChildren()){
+            node.setVisible(false);
+        }
+        this.imageView.setVisible(false);
+        this.r.setVisible(false);
+        this.shownName.setVisible(false);
+
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
-        this.group.setVisible(false);
+//        this.group.setVisible(false);
+
         this.unbindExporter();
 //        this.strategy.unbindManageable();
         this.setStrategy(null);

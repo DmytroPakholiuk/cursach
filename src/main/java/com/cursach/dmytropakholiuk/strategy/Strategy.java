@@ -38,17 +38,20 @@ public abstract class Strategy {
         NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
     }
 
+    protected static StrategyManageable buffer;
     protected boolean isSleeping = false;
     protected LocalDateTime sleepFrom;
     protected double sleepingFor;
     protected Runnable sleepCallback;
     public void sleep(double seconds, Runnable callback){
 
-        System.out.println("INSIDE SLEEP()");
+        System.out.println("INSIDE SLEEP(1)");
         this.sleepFrom = LocalDateTime.now();
         this.sleepingFor = seconds;
         this.sleepCallback = callback;
         this.isSleeping = true;
+        System.out.println("INSIDE SLEEP(2)");
+        System.out.println(this.isSleeping());
     }
 
 
@@ -63,8 +66,12 @@ public abstract class Strategy {
     public void checkSleep(){
         System.out.println("CHECK SLEEP");
         if (ChronoUnit.SECONDS.between(this.sleepFrom, LocalDateTime.now()) > this.sleepingFor){
-            sleepCallback.run();
+            Application.strategyTimer.stop();
+            if (sleepCallback != null){
+                sleepCallback.run();
+            }
             this.wakeUp();
+            Application.strategyTimer.start();
         }
     }
 

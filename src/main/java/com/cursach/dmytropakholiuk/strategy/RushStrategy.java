@@ -8,7 +8,7 @@ import javafx.concurrent.Task;
 
 public class RushStrategy extends TransportStrategy{
 
-    private static StrategyManageable buffer;
+
     public void execute(){
         super.execute();
 //        if (this.isSleeping()){
@@ -30,13 +30,13 @@ public class RushStrategy extends TransportStrategy{
                         @Override
                         protected Void call() throws Exception {
 //                            System.out.println("IN METAMORPHOSIS");
-                            RushStrategy.buffer = manageable;
+                            Strategy.buffer = manageable;
 //                            Platform.runLater(() -> {
 //                                System.out.println("CYCLING 11");
 //                                ((InactivePlasmodium)RushStrategy.buffer).quitOrgan();
 //                                System.out.println("CYCLING 22");});
-                            RushStrategy.buffer.quitOrgan();
-                            ((InactivePlasmodium)RushStrategy.buffer).cycleStage();
+                            Strategy.buffer.quitOrgan();
+                            ((InactivePlasmodium)Strategy.buffer).cycleStage();
 
 //                            ((InactivePlasmodium)buffer).cycleStage(() -> {
 //                                System.out.println("CYCLING 11");
