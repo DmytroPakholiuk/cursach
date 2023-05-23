@@ -7,6 +7,8 @@ import com.cursach.dmytropakholiuk.organs.Anopheles;
 import com.cursach.dmytropakholiuk.organs.Liver;
 import com.cursach.dmytropakholiuk.organs.Marrow;
 import com.cursach.dmytropakholiuk.organs.Organ;
+import com.cursach.dmytropakholiuk.strategy.InactiveStrategy;
+import com.cursach.dmytropakholiuk.strategy.RandomStrategy;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
@@ -37,6 +39,7 @@ public class Application extends javafx.application.Application {
 //    public static Cell[] cells = new Cell[0];
     public static List<Cell> cells = new ArrayList<>();
     public static Logger logger = Logger.getInstance();
+    public static double appWidth = 600, appHeight = 700;
 
     public static Anopheles anopheles;
     public static Liver liver;
@@ -48,7 +51,7 @@ public class Application extends javafx.application.Application {
         }
     }
     public static void refreshScreen(){
-        stage.setHeight(stage.getHeight() + 0.0001);
+        stage.setHeight(stage.getHeight() + 0.000000001);
     }
     public static AnimationTimer strategyTimer = new AnimationTimer() {
         @Override
@@ -84,6 +87,7 @@ public class Application extends javafx.application.Application {
         Application.marrow = new Marrow(0,450);
         Cell example =  new WhiteBloodCell("example", false, 300, 400, 30, 7.5);
         Cell example1 =  new WhiteBloodCell("example1", false, 400, 400, 30, 7.5);
+        example1.setStrategy(new RandomStrategy());
 
         cells.sort(Cell.coordinateComparator);
         System.out.println(cells);
@@ -186,7 +190,6 @@ public class Application extends javafx.application.Application {
                 for (Cell cell: cells){
                     if (cell.isActive()){
                         cell.enterOrgan();
-                        //todo
                     }
                 }
                 logger.log("User tried to enter organs with cells");
@@ -244,6 +247,26 @@ public class Application extends javafx.application.Application {
                 }
                 logger.log("User moved selected cells RIGHT");
 
+            }
+
+
+            if (event.getCode().equals(KeyCode.DIGIT1)){
+                for (Cell cell: cells){
+                    cell.setStrategy(new InactiveStrategy());
+                }
+                logger.log("User enabled inactive mode");
+            }
+            if (event.getCode().equals(KeyCode.DIGIT2)){
+                for (Cell cell: cells){
+                    cell.setStrategy(new RandomStrategy());
+                }
+                logger.log("User enabled random mode");
+            }
+            if (event.getCode().equals(KeyCode.DIGIT3)){
+                for (Cell cell: cells){
+                    cell.setDefaultStrategy();
+                }
+                logger.log("User enabled standard mode");
             }
         }
 

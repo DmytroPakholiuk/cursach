@@ -37,6 +37,32 @@ public abstract class Strategy {
     public enum Direction{
         NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
     }
+    public static void moveInDirection(Direction direction, StrategyManageable manageable, double speed){
+        switch (direction){
+            case NORTH:
+                manageable.setY(manageable.getY() - speed);break;
+            case SOUTH:
+                manageable.setY(manageable.getY() + speed);break;
+            case EAST:
+                manageable.setX(manageable.getX() + speed);break;
+            case WEST:
+                manageable.setX(manageable.getX() - speed);break;
+            case NORTHEAST:
+                manageable.setY(manageable.getY() - speed);
+                manageable.setX(manageable.getX() + speed);break;
+            case NORTHWEST:
+                manageable.setY(manageable.getY() - speed);
+                manageable.setX(manageable.getX() - speed);break;
+            case SOUTHEAST:
+                manageable.setY(manageable.getY() + speed);
+                manageable.setX(manageable.getX() + speed);break;
+            case SOUTHWEST:
+                manageable.setY(manageable.getY() + speed);
+                manageable.setX(manageable.getX() - speed);break;
+            default:
+                throw new RuntimeException();
+        }
+    }
 
     protected static StrategyManageable buffer;
     protected boolean isSleeping = false;
