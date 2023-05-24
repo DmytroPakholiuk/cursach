@@ -224,33 +224,38 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
      */
     protected void configureGroup()
     {
-        ImageView imageView = new ImageView(getImage());
-        imageView.setFitHeight(50);
-        imageView.setFitWidth(50);
-        imageView.setPreserveRatio(false);
-        this.imageView = imageView;
+        try{
+            ImageView imageView = new ImageView(getImage());
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            imageView.setPreserveRatio(false);
+            this.imageView = imageView;
 
-        Circle aura = new Circle();
-        aura.setRadius(40.0f);
-        aura.setFill(getrRColour());
-        this.r = aura;
+            Circle aura = new Circle();
+            aura.setRadius(40.0f);
+            aura.setFill(getrRColour());
+            this.r = aura;
 
-        this.group = new Group(r, imageView, shownName);
-        imageView.relocate(15, 15);
-        shownName.relocate(0, 0);
-        r.relocate(0, 0);
+            this.group = new Group(r, imageView, shownName);
+            imageView.relocate(15, 15);
+            shownName.relocate(0, 0);
+            r.relocate(0, 0);
 
-        group.toFront();
+            group.toFront();
 //        group.setManaged(false);
 
-        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-            @Override
-            public void handle(MouseEvent event) {
-                setActive(!active);
-                Application.logger.log("User selected cell in X = " + event.getX() + " Y = " + event.getY());
-            }
-        });
+                @Override
+                public void handle(MouseEvent event) {
+                    setActive(!active);
+                    Application.logger.log("User selected cell in X = " + event.getX() + " Y = " + event.getY());
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**

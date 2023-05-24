@@ -71,13 +71,13 @@ public abstract class Strategy {
     protected Runnable sleepCallback;
     public void sleep(double seconds, Runnable callback){
 
-        System.out.println("INSIDE SLEEP(1)");
+//        System.out.println("INSIDE SLEEP(1)");
         this.sleepFrom = LocalDateTime.now();
         this.sleepingFor = seconds;
         this.sleepCallback = callback;
         this.isSleeping = true;
-        System.out.println("INSIDE SLEEP(2)");
-        System.out.println(this.isSleeping());
+//        System.out.println("INSIDE SLEEP(2)");
+//        System.out.println(this.isSleeping());
     }
 
 
@@ -90,7 +90,7 @@ public abstract class Strategy {
     }
 
     public void checkSleep(){
-        System.out.println("CHECK SLEEP");
+//        System.out.println("CHECK SLEEP");
         if (ChronoUnit.SECONDS.between(this.sleepFrom, LocalDateTime.now()) > this.sleepingFor){
             Application.strategyTimer.stop();
             if (sleepCallback != null){

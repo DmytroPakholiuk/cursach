@@ -24,7 +24,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
     @JsonIgnore
     private Image image;
     protected Image configureImage(){
-        System.out.println("setting image for an inactive plasmodium");
+        System.out.println("setting image for a plasmodium");
         return stage.getImage();
     }
     @Override
@@ -42,7 +42,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
 
     public InactivePlasmodium(String _name, boolean _active, int _x, int _y, int _step, OrganType oType)
     {
-        System.out.println("called specified InactivePlasmodium constructor\n");
+        System.out.println("called specified Plasmodium constructor\n");
 
         this.bindDefaultStage();
         System.out.println(this.stage.toString());
@@ -91,7 +91,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
                 30,
                 OrganType.ORGANTYPE_NULLORGAN);
 
-        System.out.println("...via default InactivePlasmodium constructor\n");
+        System.out.println("...via default Plasmodium constructor\n");
     }
 
 

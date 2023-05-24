@@ -119,9 +119,33 @@ public class CreationDialogue {
                             ((InactivePlasmodium)cell).bindStage(stage);
                             break;
                         case "Plasmodium vivax":
-                            CellFactory.createCell(CellFactory.CELLTYPE_PLASVIVAX);break;
+                            PStage stage1 = null;
+                            switch (pStage.getValue().toString()){
+                                case "Schizont":
+                                    stage1 = new SchizontPStage(); break;
+                                case "Gametocyte":
+                                    stage1 = new GametocytePStage(); break;
+                                case "Sporozoit":
+                                    stage1 = new SporozoitPStage(); break;
+                            }
+
+                            cell = new PlasmodiumVivax(name, _active, x, y, 30, OrganType.ORGANTYPE_NULLORGAN);
+                            ((InactivePlasmodium)cell).bindStage(stage1);
+                            break;
                         case "HIV-plasmodium":
-                            CellFactory.createCell(CellFactory.CELLTYPE_HIVPLAS);break;
+                            PStage stage2 = null;
+                            switch (pStage.getValue().toString()){
+                                case "Schizont":
+                                    stage2 = new SchizontPStage(); break;
+                                case "Gametocyte":
+                                    stage2 = new GametocytePStage(); break;
+                                case "Sporozoit":
+                                    stage2 = new SporozoitPStage(); break;
+                            }
+
+                            cell = new HIVPlasmodium(name, _active, x, y, 30, OrganType.ORGANTYPE_NULLORGAN);
+                            ((InactivePlasmodium)cell).bindStage(stage2);
+                            break;
                     }
                 } catch (Exception e){
                     e.printStackTrace();
