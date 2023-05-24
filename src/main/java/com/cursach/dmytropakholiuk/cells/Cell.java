@@ -8,6 +8,7 @@ import com.cursach.dmytropakholiuk.strategy.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -198,6 +199,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.organType = Organ.getOrganType(this.organ);
     }
     public void quitOrgan(){
+
         if (!(this.organ instanceof Organ.NullOrgan)){
             this.setVisible(true);
             organ.moveOutside(this);
@@ -205,6 +207,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             this.organ = Application.nullOrgan;
             this.organType = Organ.getOrganType(this.organ);
         }
+
     }
 
     /**
@@ -221,33 +224,38 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
      */
     protected void configureGroup()
     {
-        ImageView imageView = new ImageView(getImage());
-        imageView.setFitHeight(50);
-        imageView.setFitWidth(50);
-        imageView.setPreserveRatio(true);
-        this.imageView = imageView;
+        try{
+            ImageView imageView = new ImageView(getImage());
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            imageView.setPreserveRatio(false);
+            this.imageView = imageView;
 
-        Circle aura = new Circle();
-        aura.setRadius(40.0f);
-        aura.setFill(getrRColour());
-        this.r = aura;
+            Circle aura = new Circle();
+            aura.setRadius(40.0f);
+            aura.setFill(getrRColour());
+            this.r = aura;
 
-        this.group = new Group(r, imageView, shownName);
-        imageView.relocate(15, 15);
-        shownName.relocate(0, 0);
-        r.relocate(0, 0);
+            this.group = new Group(r, imageView, shownName);
+            imageView.relocate(15, 15);
+            shownName.relocate(0, 0);
+            r.relocate(0, 0);
 
-        group.toFront();
+            group.toFront();
 //        group.setManaged(false);
 
-        this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            this.group.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-            @Override
-            public void handle(MouseEvent event) {
-                setActive(!active);
-                Application.logger.log("User selected cell in X = " + event.getX() + " Y = " + event.getY());
-            }
-        });
+                @Override
+                public void handle(MouseEvent event) {
+                    setActive(!active);
+                    Application.logger.log("User selected cell in X = " + event.getX() + " Y = " + event.getY());
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -270,9 +278,19 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
 
         this.quitOrgan();
 
+        System.out.println(this.group.getChildren());
+
+        for (Node node: this.group.getChildren()){
+            node.setVisible(false);
+        }
+        this.imageView.setVisible(false);
+        this.r.setVisible(false);
+        this.shownName.setVisible(false);
+
         Application.cellGroup.getChildren().remove(this.group);
         Application.cells.remove(this);
-        this.group.setVisible(false);
+//        this.group.setVisible(false);
+
         this.unbindExporter();
 //        this.strategy.unbindManageable();
         this.setStrategy(null);

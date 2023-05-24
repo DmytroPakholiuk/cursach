@@ -2,6 +2,7 @@ package com.cursach.dmytropakholiuk.organs;
 
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.cells.Cell;
+import com.cursach.dmytropakholiuk.cells.Deployable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Base organ functionality class.
  */
-public abstract class Organ {
+public abstract class Organ implements Deployable {
 
     public static OrganType getOrganType(Organ organ){
         if (organ instanceof NullOrgan){
@@ -84,6 +85,12 @@ public abstract class Organ {
     }
 
     protected double x, y;
+    public double getSpeed(){
+        return 0.0;
+    }
+    public void setSpeed(double speed){
+
+    }
     public double getX(){return x;}
     public void setX(double _x)
     {
@@ -110,6 +117,11 @@ public abstract class Organ {
         this.shownText.setText(text);
     }
     public Rectangle r;
+
+    @Override
+    public boolean isVisible() {
+        return true;
+    }
 
     protected Color rColour;
     /**
@@ -170,14 +182,22 @@ public abstract class Organ {
     }
     public void moveOutside(Cell cell){
         if (this.tenants.contains(cell)){
+
             cell.setX(this.getX());
             cell.setY(this.getY());
 
-            Application.cellGroup.getChildren().add(cell.getGroup());
+            try{
+                Application.cellGroup.getChildren().add(cell.getGroup());
+            }catch (Exception e){
+                e.printStackTrace();
+
+            }
+
             cell.setVisible(true);
 
             this.tenants.remove(cell);
         }
+
     }
 
     public List<Cell> tenants = new ArrayList<>();
@@ -191,5 +211,9 @@ public abstract class Organ {
 //    public boolean canEnter(CellType cellType){
 //
 //    }
+
+    public void delete(){
+
+    }
 
 }

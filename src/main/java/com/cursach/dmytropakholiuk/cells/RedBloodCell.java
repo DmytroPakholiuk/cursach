@@ -7,6 +7,7 @@ import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -111,6 +112,19 @@ public class RedBloodCell extends Cell implements Cloneable{
         return this.getPrettyString();
     }
 
+    public void delete(){
+        try {
+            super.delete();
+            if (infestor != null){
+                this.infestor.delete();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
     protected List<UsableStrategies> setAllowedStrategies(){
         List<UsableStrategies> strategies = new ArrayList<>();
         strategies.add(UsableStrategies.INACTIVE);
@@ -121,5 +135,64 @@ public class RedBloodCell extends Cell implements Cloneable{
     @Override
     public void setDefaultStrategy() {
         this.setStrategy(new InactiveStrategy());
+    }
+
+
+    public InactivePlasmodium infestor;
+
+    public void infestWith(InactivePlasmodium plasmodium){
+        if (this.infestor == null){
+            this.infestor = plasmodium;
+            this.image = new Image(Application.class.getResource("infrbc.png").toString());
+            plasmodium.setActive(false);
+
+            Application.cellGroup.getChildren().remove(plasmodium.getGroup());
+            if (this.group != null){
+                this.imageView.setVisible(false);
+                this.group.getChildren().remove(imageView);
+                this.imageView = new ImageView(image);
+                imageView.setFitHeight(50);
+                imageView.setFitWidth(50);
+                imageView.setPreserveRatio(true);
+                this.group.getChildren().add(imageView);
+
+
+                imageView.relocate(15, 15);
+            }
+            plasmodium.setVisible(false);
+        }
+    }
+    public void deinfest(){
+        this.infestor.setX(this.getX()+50);
+        this.infestor.setY(this.getY()+50);
+//        this.image = new Image(Application.class.getResource("rbc.png").toString());
+        this.image = new Image(Application.class.getResource("rbc.png").toString());
+
+
+        Application.cellGroup.getChildren().add(infestor.getGroup());
+        if (this.group != null){
+            this.imageView.setVisible(false);
+            this.group.getChildren().remove(imageView);
+            this.imageView = new ImageView(image);
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+            imageView.setPreserveRatio(true);
+            this.group.getChildren().add(imageView);
+
+
+            imageView.relocate(15, 15);
+        }
+
+//        try{
+//            Application.cellGroup.getChildren().add(this.infestor.getGroup());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//
+//        }
+
+        this.infestor.setVisible(true);
+
+        this.infestor = null;
+//        configureGroup();
     }
 }

@@ -140,4 +140,40 @@ public class JSONExporter implements Exporter{
             e.printStackTrace();
         }
     }
+
+    public void save(String fileName){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("saves/"+fileName+".json"));
+
+            Save save = new Save();
+            writer.write(this.exportObjectAsString(save));
+            System.out.println("saving...");
+
+            writer.close();
+        } catch (Exception e){
+            System.out.println("could not save");
+            throw new RuntimeException();
+        }
+    }
+
+    public void askForSave(){
+
+    }
+
+    public void load(String fileName) {
+        this.truncateExportables();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File("saves/"+fileName+""));
+            while (scanner.hasNextLine()) {
+                String serialized = scanner.nextLine();
+                this.importObjectFromString(serialized);
+            }
+            System.out.println("loading...");
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
