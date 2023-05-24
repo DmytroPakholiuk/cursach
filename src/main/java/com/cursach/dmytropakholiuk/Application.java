@@ -3,6 +3,8 @@ package com.cursach.dmytropakholiuk;
 import com.cursach.dmytropakholiuk.cells.Cell;
 import com.cursach.dmytropakholiuk.cells.WhiteBloodCell;
 import com.cursach.dmytropakholiuk.export.JSONExporter;
+import com.cursach.dmytropakholiuk.export.LoadAsk;
+import com.cursach.dmytropakholiuk.export.SaveAsk;
 import com.cursach.dmytropakholiuk.organs.Anopheles;
 import com.cursach.dmytropakholiuk.organs.Liver;
 import com.cursach.dmytropakholiuk.organs.Marrow;
@@ -213,6 +215,12 @@ public class Application extends javafx.application.Application {
 
                 Application.strategyTimer.start();
                 logger.log("User quickloaded");
+            }
+            if (event.getCode().equals(KeyCode.DIGIT6)){
+                new SaveAsk();
+            }
+            if (event.getCode().equals(KeyCode.DIGIT7)){
+                new LoadAsk();
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {
