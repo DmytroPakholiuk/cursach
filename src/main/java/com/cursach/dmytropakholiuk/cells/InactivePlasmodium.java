@@ -75,6 +75,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         this.bindDefaultExporter();
         allowedStrategies = setAllowedStrategies();
         this.setDefaultStrategy();
+        Application.miniMap.addCell(this);
 
         this.enterOrgan(Organ.getOrganByType(oType));
 

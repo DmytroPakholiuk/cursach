@@ -65,6 +65,7 @@ public class RedBloodCell extends Cell implements Cloneable{
         allowedStrategies = setAllowedStrategies();
         this.setDefaultStrategy();
         this.bindDefaultExporter();
+        Application.miniMap.addCell(this);
 
         System.out.println("created object "+this.toString());
         System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
