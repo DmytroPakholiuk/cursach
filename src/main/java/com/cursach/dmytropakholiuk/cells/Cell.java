@@ -440,6 +440,13 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
     }
+
+    /**
+     * alias for binding default one
+     */
+    public void bindExporter(){
+        this.bindDefaultExporter();
+    }
     @JsonIgnore
     protected List<UsableStrategies> allowedStrategies;
 //            = setAllowedStrategies();

@@ -156,6 +156,22 @@ public class JSONExporter implements Exporter{
         }
     }
 
+    public void save(File file)
+    {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            Save save = new Save();
+            writer.write(this.exportObjectAsString(save));
+            System.out.println("saving...");
+
+            writer.close();
+        } catch (Exception e){
+            System.out.println("could not save");
+//            throw new RuntimeException();
+        }
+    }
+
     public void askForSave(){
 
     }
@@ -175,5 +191,23 @@ public class JSONExporter implements Exporter{
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void load(File file){
+        this.truncateExportables();
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String serialized = scanner.nextLine();
+                this.importObjectFromString(serialized);
+            }
+            System.out.println("loading...");
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("could not load");
+//            e.printStackTrace();
+        }
+
     }
 }

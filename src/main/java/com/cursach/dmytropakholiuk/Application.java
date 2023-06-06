@@ -24,10 +24,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,10 +80,21 @@ public class Application extends javafx.application.Application {
 //                );
                 cell.getStrategy().execute();
             }
+//            miniMap.updateMap();
+//            infoPanel.update();
+        }
+    };
+    public static AnimationTimer mapTimer = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
             miniMap.updateMap();
             infoPanel.update();
         }
     };
+    public static boolean isStrategyRunning = true;
+    public static void toggleStrategyExecution(){
+
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -115,6 +128,7 @@ public class Application extends javafx.application.Application {
         stage.setTitle("Some infected nigger");
         stage.setScene(scene);
         strategyTimer.start();
+        mapTimer.start();
         stage.show();
     }
 
@@ -240,10 +254,22 @@ public class Application extends javafx.application.Application {
                 logger.log("User quickloaded");
             }
             if (event.getCode().equals(KeyCode.DIGIT6)){
-                new SaveAsk();
+//                new SaveAsk();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("SAVE");
+                fileChooser.setInitialDirectory(new File("saves"));
+                File file = fileChooser.showSaveDialog(new Stage());
+                jsonExporter.save(file);
+                logger.log("User saved: " + file.getAbsolutePath());
             }
             if (event.getCode().equals(KeyCode.DIGIT7)){
-                new LoadAsk();
+//                new LoadAsk();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("LOAD");
+                fileChooser.setInitialDirectory(new File("saves"));
+                File file = fileChooser.showOpenDialog(new Stage());
+                jsonExporter.load(file);
+                logger.log("User loaded: " + file.getAbsolutePath());
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {
@@ -309,15 +335,19 @@ public class Application extends javafx.application.Application {
                 switch(event.getCode()) {
                     case UP:
                         yloc += 50;
+                        logger.log("User moved camera UP");
                         break;
                     case DOWN:
                         yloc -= 50;
+                        logger.log("User moved camera DOWN");
                         break;
                     case LEFT:
                         xloc += 50;
+                        logger.log("User moved camera LEFT");
                         break;
                     case RIGHT:
                         xloc -= 50;
+                        logger.log("User moved camera RIGHT");
                         break;
                 }
 
@@ -338,6 +368,46 @@ public class Application extends javafx.application.Application {
                 Application.group.setLayoutY(yloc);
 
 
+            }
+            if (event.getCode().equals(KeyCode.SPACE))
+            {
+                if (Application.isStrategyRunning){
+                    strategyTimer.stop();
+                    Application.isStrategyRunning = false;
+                    logger.log("User paused all strategy");
+                } else {
+                    strategyTimer.start();
+                    Application.isStrategyRunning = true;
+                    logger.log("User resumed all strategy");
+                }
+            }
+            if (event.isControlDown()){
+                if (event.getCode().equals(KeyCode.DIGIT1)){
+                    for (Cell cell: cells){
+                        if (cell.isActive()){
+                            cell.setStrategy(new InactiveStrategy());
+                            logger.log("User enabled inactive mode on cell "+ cell);
+                        }
+                        }
+
+
+                }
+                if (event.getCode().equals(KeyCode.DIGIT2)){
+                    for (Cell cell: cells){
+                        if (cell.isActive()){
+                            cell.setStrategy(new RandomStrategy());
+                        }
+                        logger.log("User enabled random mode on cell" + cell);
+                    }
+                }
+                if (event.getCode().equals(KeyCode.DIGIT3)){
+                    for (Cell cell: cells){
+                        if (cell.isActive()){
+                            cell.setDefaultStrategy();
+                            logger.log("User enabled standard mode on cell" + cell);
+                        }
+                    }
+                }
             }
         }
 
