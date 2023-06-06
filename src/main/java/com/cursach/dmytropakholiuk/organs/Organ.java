@@ -159,6 +159,7 @@ public abstract class Organ implements Deployable {
         shownText.relocate(0, 0);
         r.relocate(0, 0);
 
+
         group.toBack();
 
     }

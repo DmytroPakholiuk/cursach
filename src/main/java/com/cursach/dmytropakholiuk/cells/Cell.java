@@ -135,10 +135,17 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             return;
         }
         this.active = a;
-        if (this.active)
+        if (this.active){
             this.r.setFill(Color.RED);
-        else
+            Application.infoPanel.addCell(this);
+        } else {
             this.r.setFill(getrRColour());
+            try {
+                Application.infoPanel.removeCell(this);
+            } catch (Exception e) {
+
+            }
+        }
     }
     public void switchActivation(){
         setActive(!this.isActive());
@@ -154,6 +161,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         return visible;
     }
     public void setVisible(boolean visible){
+
+
         this.visible = visible;
         this.group.setVisible(visible);
     }
@@ -294,6 +303,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         this.unbindExporter();
 //        this.strategy.unbindManageable();
         this.setStrategy(null);
+        Application.miniMap.deleteCell(this);
+        Application.infoPanel.removeCell(this);
         Application.refreshScreen();
 
         Application.strategyTimer.start();
@@ -357,21 +368,47 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
     public void moveLeft() {
         if (!active) return;
         int x = (int) (group.getLayoutX() - step);
+        if (x < 0){
+            x = 0;
+        }
+        System.out.println(Application.scrollPane.getMaxHeight());
+        if (x > Application.scrollPane.getMaxHeight() - 80){
+            x = (int) Application.scrollPane.getMaxHeight() - 80;
+        }
         setX(x);
     }
     public void moveRight() {
         if (!active) return;
         int x = (int) (group.getLayoutX() + step);
+        if (x < 0){
+            x = 0;
+        }
+        if (x > Application.scrollPane.getMaxHeight() - 80){
+            x = (int) Application.scrollPane.getMaxHeight() - 80;
+        }
         setX(x);
     }
     public void moveUp() {
         if (!active) return;
         int y = (int) (group.getLayoutY() - step);
+        if (y < 0){
+            y = 0;
+        }
+        if (y > Application.scrollPane.getMaxHeight() - 80){
+            y = (int) Application.scrollPane.getMaxHeight() - 80;
+        }
+//        System.out.println("up");
         setY(y);
     }
     public void moveDown() {
         if (!active) return;
         int y = (int) (group.getLayoutY() + step);
+        if (y < 0){
+            y = 0;
+        }
+        if (y > Application.scrollPane.getMaxHeight() - 80){
+            y = (int) Application.scrollPane.getMaxHeight() - 80;
+        }
         setY(y);
     }
 
@@ -402,6 +439,13 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
      */
     public void bindDefaultExporter(){
         this.bindExporter(Application.jsonExporter);
+    }
+
+    /**
+     * alias for binding default one
+     */
+    public void bindExporter(){
+        this.bindDefaultExporter();
     }
     @JsonIgnore
     protected List<UsableStrategies> allowedStrategies;

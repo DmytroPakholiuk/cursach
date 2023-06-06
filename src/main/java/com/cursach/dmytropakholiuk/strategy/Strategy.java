@@ -63,7 +63,7 @@ public abstract class Strategy {
                 throw new RuntimeException();
         }
     }
-
+    public Direction currentDirection;
     protected static StrategyManageable buffer;
     protected boolean isSleeping = false;
     protected LocalDateTime sleepFrom;

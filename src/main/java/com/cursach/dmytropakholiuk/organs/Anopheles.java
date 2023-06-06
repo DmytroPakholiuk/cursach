@@ -36,6 +36,7 @@ public class Anopheles extends Organ{
         this.setX(_x);
 
         Application.organGroup.getChildren().add(this.group);
+        Application.miniMap.addOrgan(this);
 
     }
 

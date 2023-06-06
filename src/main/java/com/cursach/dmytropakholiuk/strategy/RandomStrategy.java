@@ -18,8 +18,22 @@ public class RandomStrategy extends Strategy{
         Strategy.moveInDirection(currentDirection, this.manageable, 0.5 * manageable.getSpeed());
     }
 
+    public static void executeStatic(Strategy strategy){
+        if (strategy.currentDirection == null){
+            strategy.currentDirection = RandomStrategy.randomDirection();
+        }
+        double rand = Math.random() * 1000;
+        if (rand < 5){
+            strategy.currentDirection = RandomStrategy.randomDirection();
+        }
+        if (tooCloseToBorder(strategy.manageable)){
+            strategy.currentDirection = RandomStrategy.generateOppositeDirection(strategy.currentDirection);
+        }
+        Strategy.moveInDirection(strategy.currentDirection, strategy.manageable, 0.5 * strategy.manageable.getSpeed());
+    }
 
-    public boolean tooCloseToBorder(Deployable target){
+
+    public static boolean tooCloseToBorder(Deployable target){
         if (target.getY() < 5 || target.getX() < 5){
             return true;
         }
@@ -28,7 +42,7 @@ public class RandomStrategy extends Strategy{
         }
         return false;
     }
-    public Direction currentDirection;
+
     public static Direction randomDirection(){
         int rand = (int)(Math.random() * 8);
         switch (rand){

@@ -71,6 +71,7 @@ public class WhiteBloodCell extends Cell {
         this.bindDefaultExporter();
         allowedStrategies = setAllowedStrategies();
         this.setDefaultStrategy();
+        Application.miniMap.addCell(this);
 
         System.out.println("created object "+this.toString());
         System.out.println("exported directly: "+Application.jsonExporter.exportObjectAsString(this));
@@ -82,7 +83,7 @@ public class WhiteBloodCell extends Cell {
         this("", false,
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
 
-                0,0,
+                50,50,
                 30,
                 7.5);
 

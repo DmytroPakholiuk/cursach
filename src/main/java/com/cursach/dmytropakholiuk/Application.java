@@ -16,12 +16,20 @@ import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,15 +41,21 @@ public class Application extends javafx.application.Application {
     static AnimationTimer timer ;
     static Scene scene;
     static Stage stage;
-    static BorderPane layout;
-    public static ScrollPane scrollPane;
+    public static ScrollPane scrollPane = new ScrollPane(new Pane());
+    public static void configureScrollPane(){
+        scrollPane.setMaxHeight(3000);
+        scrollPane.setMaxWidth(3000);
+    }
+    public static MiniMap miniMap = new MiniMap();
+    public static InfoPanel infoPanel = new InfoPanel();
+
     public static Group group = new Group();
     public static Group cellGroup = new Group();
     public static Group organGroup = new Group();
 //    public static Cell[] cells = new Cell[0];
     public static List<Cell> cells = new ArrayList<>();
     public static Logger logger = Logger.getInstance();
-    public static double appWidth = 600, appHeight = 700;
+    public static double appWidth = 1920, appHeight = 1080;
 
     public static Anopheles anopheles;
     public static Liver liver;
@@ -66,39 +80,55 @@ public class Application extends javafx.application.Application {
 //                );
                 cell.getStrategy().execute();
             }
+//            miniMap.updateMap();
+//            infoPanel.update();
         }
     };
+    public static AnimationTimer mapTimer = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            miniMap.updateMap();
+            infoPanel.update();
+        }
+    };
+    public static boolean isStrategyRunning = true;
+    public static void toggleStrategyExecution(){
+
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
-//        scrollPane = new ScrollPane();
-//        scrollPane.setMaxWidth(1000);
-//        scrollPane.setMaxHeight(1000);
-//        scrollPane.setFitToHeight(true);
-//        scrollPane.setFitToWidth(true);
-//        layout = new BorderPane();
+
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+        configureScrollPane();
+        //        layout = new BorderPane();
 //        layout.setCenter(scrollPane);
         Application.stage = stage;
 
         group.getChildren().add(organGroup);
         group.getChildren().add(cellGroup);
+//        group.getChildren().add(scrollPane);
+        group.getChildren().add(miniMap);
+        group.getChildren().add(infoPanel);
 
 
-        Application.anopheles = new Anopheles(300, 300);
-        Application.liver = new Liver(0,0);
-        Application.marrow = new Marrow(0,450);
+        Application.anopheles = new Anopheles(320, 320);
+        Application.liver = new Liver(20,20);
+        Application.marrow = new Marrow(20,470);
         Cell example =  new WhiteBloodCell("example", false, 300, 400, 30, 7.5);
         Cell example1 =  new WhiteBloodCell("example1", false, 400, 400, 30, 7.5);
-        example1.setStrategy(new RandomStrategy());
 
         cells.sort(Cell.coordinateComparator);
         System.out.println(cells);
 
-        scene = new Scene(group, 600,700);
+        scene = new Scene(group, 1080,780);
+
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
         stage.setScene(scene);
         strategyTimer.start();
+        mapTimer.start();
         stage.show();
     }
 
@@ -119,6 +149,13 @@ public class Application extends javafx.application.Application {
      * - CTRL+A - select all cells
      * - F6 - quicksave
      * - F7 - quickload
+     * - 6 - save
+     * - 7 - load
+     * - 1 - inactive stance
+     * - 2 - random stance
+     * - 3 - standard stance
+     * - ctrl+arrow - move camera
+     * - arrow - move selected cells
      */
     private class KeyPressedHandler implements EventHandler<KeyEvent> {
         public void handle(KeyEvent event) {
@@ -217,10 +254,22 @@ public class Application extends javafx.application.Application {
                 logger.log("User quickloaded");
             }
             if (event.getCode().equals(KeyCode.DIGIT6)){
-                new SaveAsk();
+//                new SaveAsk();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("SAVE");
+                fileChooser.setInitialDirectory(new File("saves"));
+                File file = fileChooser.showSaveDialog(new Stage());
+                jsonExporter.save(file);
+                logger.log("User saved: " + file.getAbsolutePath());
             }
             if (event.getCode().equals(KeyCode.DIGIT7)){
-                new LoadAsk();
+//                new LoadAsk();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("LOAD");
+                fileChooser.setInitialDirectory(new File("saves"));
+                File file = fileChooser.showOpenDialog(new Stage());
+                jsonExporter.load(file);
+                logger.log("User loaded: " + file.getAbsolutePath());
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 for (Cell cell : cells) {
@@ -275,6 +324,90 @@ public class Application extends javafx.application.Application {
                     cell.setDefaultStrategy();
                 }
                 logger.log("User enabled standard mode");
+            }
+
+            if(event.isControlDown()) {
+
+                double xloc= Application.group.getLayoutX();
+                double yloc = Application.group.getLayoutY();
+                System.out.println(Application.group.getLayoutX());
+
+                switch(event.getCode()) {
+                    case UP:
+                        yloc += 50;
+                        logger.log("User moved camera UP");
+                        break;
+                    case DOWN:
+                        yloc -= 50;
+                        logger.log("User moved camera DOWN");
+                        break;
+                    case LEFT:
+                        xloc += 50;
+                        logger.log("User moved camera LEFT");
+                        break;
+                    case RIGHT:
+                        xloc -= 50;
+                        logger.log("User moved camera RIGHT");
+                        break;
+                }
+
+                if(xloc>0)xloc=0.0;
+
+                if( !( -(xloc - stage.getWidth()) < Application.scrollPane.getMaxWidth() ) ){
+                    xloc = (-(Application.scrollPane.getMaxWidth() - stage.getWidth()));
+                }
+
+                if(yloc>0)yloc=0.0;
+
+                if( !( -(yloc - stage.getHeight() ) < Application.scrollPane.getMaxHeight( ) )){
+                    yloc = (-(Application.scrollPane.getMaxHeight() - stage.getHeight()));
+                }
+
+
+                Application.group.setLayoutX(xloc);
+                Application.group.setLayoutY(yloc);
+
+
+            }
+            if (event.getCode().equals(KeyCode.SPACE))
+            {
+                if (Application.isStrategyRunning){
+                    strategyTimer.stop();
+                    Application.isStrategyRunning = false;
+                    logger.log("User paused all strategy");
+                } else {
+                    strategyTimer.start();
+                    Application.isStrategyRunning = true;
+                    logger.log("User resumed all strategy");
+                }
+            }
+            if (event.isControlDown()){
+                if (event.getCode().equals(KeyCode.DIGIT1)){
+                    for (Cell cell: cells){
+                        if (cell.isActive()){
+                            cell.setStrategy(new InactiveStrategy());
+                            logger.log("User enabled inactive mode on cell "+ cell);
+                        }
+                        }
+
+
+                }
+                if (event.getCode().equals(KeyCode.DIGIT2)){
+                    for (Cell cell: cells){
+                        if (cell.isActive()){
+                            cell.setStrategy(new RandomStrategy());
+                        }
+                        logger.log("User enabled random mode on cell" + cell);
+                    }
+                }
+                if (event.getCode().equals(KeyCode.DIGIT3)){
+                    for (Cell cell: cells){
+                        if (cell.isActive()){
+                            cell.setDefaultStrategy();
+                            logger.log("User enabled standard mode on cell" + cell);
+                        }
+                    }
+                }
             }
         }
 
