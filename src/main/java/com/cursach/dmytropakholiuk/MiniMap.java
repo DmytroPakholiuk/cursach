@@ -48,7 +48,7 @@ public class MiniMap extends Group {
         mainArea.setStroke(Color.YELLOW);
 //        this.getChildren().addAll(rectangle, label, mainArea);
         this.getChildren().addAll(label, mainArea, iSee);
-        label.relocate(0, 320);
+        label.relocate(0, 310);
 
         this.setOnMousePressed(event -> {
             this.moveTo(event.getX(), event.getY());

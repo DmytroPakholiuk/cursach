@@ -135,10 +135,17 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
             return;
         }
         this.active = a;
-        if (this.active)
+        if (this.active){
             this.r.setFill(Color.RED);
-        else
+            Application.infoPanel.addCell(this);
+        } else {
             this.r.setFill(getrRColour());
+            try {
+                Application.infoPanel.removeCell(this);
+            } catch (Exception e) {
+
+            }
+        }
     }
     public void switchActivation(){
         setActive(!this.isActive());

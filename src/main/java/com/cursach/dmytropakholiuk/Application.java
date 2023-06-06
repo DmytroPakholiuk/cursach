@@ -45,6 +45,7 @@ public class Application extends javafx.application.Application {
         scrollPane.setMaxWidth(3000);
     }
     public static MiniMap miniMap = new MiniMap();
+    public static InfoPanel infoPanel = new InfoPanel();
 
     public static Group group = new Group();
     public static Group cellGroup = new Group();
@@ -78,6 +79,7 @@ public class Application extends javafx.application.Application {
                 cell.getStrategy().execute();
             }
             miniMap.updateMap();
+            infoPanel.update();
         }
     };
 
@@ -95,6 +97,7 @@ public class Application extends javafx.application.Application {
         group.getChildren().add(cellGroup);
 //        group.getChildren().add(scrollPane);
         group.getChildren().add(miniMap);
+        group.getChildren().add(infoPanel);
 
 
         Application.anopheles = new Anopheles(300, 300);
@@ -102,92 +105,11 @@ public class Application extends javafx.application.Application {
         Application.marrow = new Marrow(0,450);
         Cell example =  new WhiteBloodCell("example", false, 300, 400, 30, 7.5);
         Cell example1 =  new WhiteBloodCell("example1", false, 400, 400, 30, 7.5);
-//        example1.setStrategy(new RandomStrategy());
-
-//        scrollPane.viewportBoundsProperty().addListener(new ChangeListener<Bounds>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Bounds>
-//                                        observable, Bounds oldBounds,
-//                                Bounds bounds) {
-//                double scrollWidth;
-//                double scrollHeight;
-//                Main.scrollX = -1 * (int) bounds.getMinX();
-//                scrollWidth = -1 * (int) bounds.getMinX() + (int) bounds.getWidth();
-//                Main.scrollY = -1 * (int) bounds.getMinY();
-//                scrollHeight = -1 * (int) bounds.getMinY() + bounds.getHeight();
-//
-//                //постійний здвиг стрічки меню при прокручуванні
-//                parent.setLayoutX(scrollX);
-//                parent.setLayoutY(scrollY);
-//
-//                // постійни здвиг карти при прокручуванні
-//                city.getMiniMap().getPane().setLayoutX(scrollX + 10);
-//                city.getMiniMap().getPane().setLayoutY(scrollY + scene.getHeight() - city.getMiniMap().getPane().getHeight() - 25);
-//                city.getMiniMap().getMainArea().setLayoutX(scrollX*MiniMap.getSCALE());
-//                city.getMiniMap().getMainArea().setLayoutY(scrollY*MiniMap.getSCALE());
-//
-////                city.getInformationGroup().setLayoutX(scrollX);
-////                city.getInformationGroup().setLayoutY(scrollY);
-//               /* city.getInteractWithPlayerModeLabel().setLayoutX(scrollX+10);
-//                city.getInteractWithPlayerModeLabel().setLayoutY(scrollY+scene.getHeight()-city.getMiniMap().getPane().getHeight() - 50);
-//*/
-//                /*//просто показує координати в даний момент
-//                System.out.println(" X from " + Main.scrollX + " to " +
-//                        scrollWidth + "; Y from " + Main.scrollY + " to " +
-//                        scrollHeight);*/
-//            }
-//        });
 
         cells.sort(Cell.coordinateComparator);
         System.out.println(cells);
 
-        scene = new Scene(group, 600,700);
-        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                Rabbit r= new Rabbit(   Integer.toString(++counter), 100.0,  mouseEvent.getX(), mouseEvent.getY() );
-//                herd.add(r);
-
-//                if(minimapBorderRect.contains( mouseEvent.getX(), mouseEvent.getY() )){
-//                    double virtualX= ( mouseEvent.getX()/MiniMap.getSCALE());//-Application.minimapBaseX )
-//                    ;
-//                    double virtualY= ( mouseEvent.getY()//-HelloApplication.minimapBaseY )
-//                            /MiniMap.getSCALE()) ;
-//
-//                    if( !( (virtualX + stage.getWidth()) < Application.scrollPane.getMaxWidth() ) ){
-//                        virtualX =  Application.scrollPane.getMaxWidth() - stage.getWidth();
-//                    }
-//
-//                    if( !( (virtualY + stage.getHeight() ) < Application.scrollPane.getMaxHeight() ) ){
-//                        virtualY = Application.scrollPane.getMaxHeight() - stage.getHeight();
-//                    }
-//
-//                    Application.group.setLayoutX(-1*virtualX);
-//                    Application.group.setLayoutY(-1*virtualY);
-//
-//                    return;
-//                }
-//
-//                double xloc= -1*Application.group.getLayoutX() + mouseEvent.getX();
-//                double yloc = -1*Application.group.getLayoutY() + mouseEvent.getY();
-
-
-                //double virtualX=
-
-
-//                if( mouseEvent.getButton().equals(MouseButton.SECONDARY) ){
-//                    ChooseRabbitToChangeParamsDlg.display(xloc, yloc);
-//                }
-//                else{
-//                    boolean flg=world.mousePrimaryActivate(xloc, yloc);
-//
-//
-//                    if( flg==false)
-//                        RabbitParamsDlg.display(xloc, yloc);
-//                }
-                //System.out.println("Got control back!");
-            }
-        });
+        scene = new Scene(group, 1080,780);
 
         scene.setOnKeyPressed(new KeyPressedHandler());
         stage.setTitle("Some infected nigger");
