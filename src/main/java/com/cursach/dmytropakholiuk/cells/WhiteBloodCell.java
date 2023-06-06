@@ -83,7 +83,7 @@ public class WhiteBloodCell extends Cell {
         this("", false,
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
 
-                0,0,
+                50,50,
                 30,
                 7.5);
 

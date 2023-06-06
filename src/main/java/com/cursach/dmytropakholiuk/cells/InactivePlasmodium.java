@@ -88,7 +88,7 @@ public class InactivePlasmodium extends Cell implements Cloneable{
         this("", false,
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
 
-                0,0,
+                50,50,
                 30,
                 OrganType.ORGANTYPE_NULLORGAN);
 

@@ -10,8 +10,17 @@ import javafx.scene.text.Font;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Made in the similar way as MiniMap. Extends Group as well
+ */
 public class InfoPanel extends Group {
+    /**
+     * a cell-label relation map
+     */
     private HashMap<Cell, Label> shoppersMap = new HashMap<>();
+    /**
+     * yellow rectangle of main info area
+     */
     private Rectangle mainArea = new Rectangle();
     private double width = 600;
     private double height = 0;
@@ -36,6 +45,9 @@ public class InfoPanel extends Group {
 
     public void removeCell(Cell cell)
     {
+        if (!shoppersMap.containsKey(cell)){
+            return;
+        }
         shoppersMap.get(cell).setText("");
         this.getChildren().remove(shoppersMap.get(cell));
         shoppersMap.remove(cell);
@@ -45,6 +57,9 @@ public class InfoPanel extends Group {
         mainArea.setHeight(count * 12 + 12);
     }
 
+    /**
+     * relocates labels to fit in mainArea
+     */
     public void setLabelsToHeight()
     {
         int size = shoppersMap.size();
@@ -61,6 +76,9 @@ public class InfoPanel extends Group {
 
     }
 
+    /**
+     * moves the infoPanel to right-top corner of the screen
+     */
     public void update()
     {
         this.setOpacity(0.6);

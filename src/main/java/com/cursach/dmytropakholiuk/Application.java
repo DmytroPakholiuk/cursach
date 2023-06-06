@@ -100,9 +100,9 @@ public class Application extends javafx.application.Application {
         group.getChildren().add(infoPanel);
 
 
-        Application.anopheles = new Anopheles(300, 300);
-        Application.liver = new Liver(0,0);
-        Application.marrow = new Marrow(0,450);
+        Application.anopheles = new Anopheles(320, 320);
+        Application.liver = new Liver(20,20);
+        Application.marrow = new Marrow(20,470);
         Cell example =  new WhiteBloodCell("example", false, 300, 400, 30, 7.5);
         Cell example1 =  new WhiteBloodCell("example1", false, 400, 400, 30, 7.5);
 
@@ -135,6 +135,13 @@ public class Application extends javafx.application.Application {
      * - CTRL+A - select all cells
      * - F6 - quicksave
      * - F7 - quickload
+     * - 6 - save
+     * - 7 - load
+     * - 1 - inactive stance
+     * - 2 - random stance
+     * - 3 - standard stance
+     * - ctrl+arrow - move camera
+     * - arrow - move selected cells
      */
     private class KeyPressedHandler implements EventHandler<KeyEvent> {
         public void handle(KeyEvent event) {

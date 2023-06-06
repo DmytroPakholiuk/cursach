@@ -37,7 +37,13 @@ public abstract class ActiveStrategy extends Strategy{
             return;
         }
 //        System.out.println(sleepThread.getState());
+        if (this.target != null && !this.target.isVisible()){
+            this.target = null;
+        }
         approachTarget();
+        if (this.target == null){
+            RandomStrategy.executeStatic(this);
+        }
     }
 
 

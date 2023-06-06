@@ -161,6 +161,8 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
         return visible;
     }
     public void setVisible(boolean visible){
+
+
         this.visible = visible;
         this.group.setVisible(visible);
     }
@@ -302,6 +304,7 @@ public abstract class Cell implements Exportable, StrategyManageable, Deployable
 //        this.strategy.unbindManageable();
         this.setStrategy(null);
         Application.miniMap.deleteCell(this);
+        Application.infoPanel.removeCell(this);
         Application.refreshScreen();
 
         Application.strategyTimer.start();

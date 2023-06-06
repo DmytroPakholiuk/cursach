@@ -14,23 +14,28 @@ import javafx.scene.text.Font;
 
 import java.util.HashMap;
 
+/**
+ * Minimap for the app. Extends Group, so we can manipulate it as if it were an actual Group
+ */
 public class MiniMap extends Group {
     final static private double SCALE = 0.1;
 //    private Pane pane;
+    /**
+     * A hashMap of cell-rectangle
+     */
     private HashMap<Cell, Rectangle> shoppersMap;
+//    private Pane pane;
+    /**
+     * A hashMap of organ-rectangle
+     */
     private HashMap<Organ, Rectangle> buildingsMap;
     private Rectangle mainArea;
     private Rectangle iSee;
 
     public MiniMap() {
-//        this.pane = new Pane();
-//        this.pane.setMinWidth(Application.scrollPane.getMinWidth() * MiniMap.SCALE); ;
-//        this.pane.setMinHeight(Application.scrollPane.getMinHeight() * MiniMap.SCALE); ;
         shoppersMap = new HashMap<>();
         buildingsMap = new HashMap<>();
 
-
-//        iSee = new Rectangle(0, 0, Application.scene.getWidth()*SCALE, Application.scene.getHeight()*SCALE);
         iSee = new Rectangle();
         iSee.setFill(Color.LIGHTGREEN);
         iSee.setOpacity(0.2);
@@ -38,9 +43,7 @@ public class MiniMap extends Group {
         iSee.setStrokeWidth(2);
         Label label = new Label("Map");
         label.setFont(new Font("Segoe UI Black Italic", 16));
-//        label.setLayoutX(pane.getMinWidth() / 2.1);
 
-//        mainArea = new Rectangle(0, 0, Application.scrollPane.getMaxWidth() * MiniMap.SCALE, Application.scrollPane.getMaxHeight() * MiniMap.SCALE);
         mainArea = new Rectangle(0, 0, 300, 300);
         mainArea.setFill(Color.LIGHTPINK);
         mainArea.setOpacity(0.3);
@@ -55,6 +58,11 @@ public class MiniMap extends Group {
         });
     }
 
+    /**
+     * Moves area of vision to map coordinates. "movement" is implemented by moving around the superglobal app group
+     * @param x
+     * @param y
+     */
     public void moveTo(double x, double y) {
 
         double width = Application.scrollPane.getMaxWidth();
@@ -92,6 +100,10 @@ public class MiniMap extends Group {
         return SCALE;
     }
 
+    /**
+     * Basically adds a rectangle that represents this cell
+     * @param cell
+     */
     public void addCell(Cell cell) {
         Rectangle rec = new Rectangle(80 * MiniMap.SCALE, 80 * MiniMap.SCALE);
         rec.setLayoutX(cell.getX() * MiniMap.SCALE);
@@ -123,6 +135,9 @@ public class MiniMap extends Group {
         buildingsMap.remove(building);
     }
 
+    /**
+     * Moves the map in the global group and moves map elements inside map
+     */
     public void updateMap() {
         this.setOpacity(0.7);
 //        mainArea.setWidth(Application.scene.getWidth()* MiniMap.SCALE);
@@ -137,6 +152,7 @@ public class MiniMap extends Group {
         for (Cell cell : Application.cells) {
             Rectangle rec = shoppersMap.get(cell);
             rec.relocate(cell.getX() * MiniMap.SCALE, cell.getY() * MiniMap.SCALE);
+            rec.setVisible(cell.isVisible());
         }
     }
 }

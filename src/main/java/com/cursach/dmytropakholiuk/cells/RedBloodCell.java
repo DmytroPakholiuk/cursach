@@ -3,6 +3,7 @@ package com.cursach.dmytropakholiuk.cells;
 import com.cursach.dmytropakholiuk.Application;
 import com.cursach.dmytropakholiuk.strategy.EaterStrategy;
 import com.cursach.dmytropakholiuk.strategy.InactiveStrategy;
+import com.cursach.dmytropakholiuk.strategy.RandomStrategy;
 import com.cursach.dmytropakholiuk.strategy.UsableStrategies;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.event.EventHandler;
@@ -77,7 +78,7 @@ public class RedBloodCell extends Cell implements Cloneable{
         this("", false,
 //                (int) (Math.random() * 1000), (int)(Math.random() * 1000),
 
-                0,0,
+                50,50,
                 30);
 
         System.out.println("...via default RedBloodCell constructor\n");
@@ -135,7 +136,7 @@ public class RedBloodCell extends Cell implements Cloneable{
     }
     @Override
     public void setDefaultStrategy() {
-        this.setStrategy(new InactiveStrategy());
+        this.setStrategy(new RandomStrategy());
     }
 
 

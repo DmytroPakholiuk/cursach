@@ -75,13 +75,13 @@ public class CreationDialogue {
             public void handle(ActionEvent event) {
                 boolean answer = true;
                 String name = textFieldName.getText();
-                int x = 0;
+                int x = 50;
                 try {
                     x = Integer.parseInt(textFieldX.getText());
                 } catch (Exception e){
                 }
 
-                int y = 0;
+                int y = 50;
                 try {
                     y = Integer.parseInt(textFieldY.getText());
                 }catch (Exception e){
